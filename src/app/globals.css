@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* plus-jakarta-sans-regular - latin */
+@font-face {
+  font-display: swap;
+  font-family: "Plus Jakarta Sans";
+  font-style: normal;
+  font-weight: 400;
+  src: url("/fonts/plus-jakarta-sans-v8-latin-regular.woff2") format("woff2");
+  font-display: fallback;
+}
+
+/* plus-jakarta-sans-600 - latin */
+@font-face {
+  font-display: swap;
+  font-family: "Plus Jakarta Sans";
+  font-style: normal;
+  font-weight: 600;
+  src: url("/fonts/plus-jakarta-sans-v8-latin-600.woff2") format("woff2");
+  font-display: fallback;
+}
+
+:root {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+* {
+  font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Phone Input Styles */
+.custom-phone-input {
+  @apply rounded-xl border border-gray-200 px-4 py-3;
+}
+
+.custom-phone-input.error {
+  @apply border-red-500;
+}
+
+.custom-phone-input .PhoneInputCountry {
+  @apply mr-2;
+}
+
+.custom-phone-input .PhoneInputInput {
+  @apply flex-1 outline-none text-gray-600 placeholder-gray-400 bg-transparent;
+}
+
+/* Override default styles */
+.PhoneInputCountrySelect {
+  @apply cursor-pointer;
+}
+
+.PhoneInputCountryIcon {
+  @apply w-6 h-6 overflow-hidden rounded-sm;
+}
+
+.PhoneInputCountrySelectArrow {
+  @apply border-t-gray-400 ml-1;
+}
