@@ -1,0 +1,182 @@
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['"Plus Jakarta Sans"', "sans-serif"],
+      },
+      fontSize: {
+        // Headings
+        "heading-xxsmall": [
+          "20px",
+          { lineHeight: "24px", letterSpacing: "0.1em" },
+        ],
+        "heading-xsmall": [
+          "22px",
+          { lineHeight: "26px", letterSpacing: "0.1em" },
+        ],
+        "heading-small": [
+          "24px",
+          { lineHeight: "32px", letterSpacing: "0.1em" },
+        ],
+        "heading-medium": [
+          "28px",
+          { lineHeight: "36.4px", letterSpacing: "-0.01em" },
+        ],
+        "heading-large": [
+          "32px",
+          { lineHeight: "44.2px", letterSpacing: "-0.01em" },
+        ],
+        "heading-xlarge": [
+          "40px",
+          { lineHeight: "52px", letterSpacing: "-0.01em" },
+        ],
+
+        // Labels
+        "label-xsmall": [
+          "12px",
+          { lineHeight: "16px", letterSpacing: "0.25em" },
+        ],
+        "label-small": [
+          "14px",
+          { lineHeight: "18.2px", letterSpacing: "0.1em" },
+        ],
+        "label-medium": [
+          "16px",
+          { lineHeight: "20.8px", letterSpacing: "0.1em" },
+        ],
+        "label-large": ["18px", { lineHeight: "23.4px", letterSpacing: "0" }],
+
+        // Paragraphs
+        "paragraph-xsmall": [
+          "12px",
+          { lineHeight: "16px", letterSpacing: "0.25em" },
+        ],
+        "paragraph-small": [
+          "14px",
+          { lineHeight: "22.4px", letterSpacing: "0.25em" },
+        ],
+        "paragraph-medium": [
+          "16px",
+          { lineHeight: "25.6px", letterSpacing: "0.1em" },
+        ],
+        "paragraph-large": [
+          "18px",
+          { lineHeight: "28.8px", letterSpacing: "0" },
+        ],
+
+        // Display
+        "display-small": [
+          "56px",
+          { lineHeight: "64px", letterSpacing: "-0.01em" },
+        ],
+        "display-medium": [
+          "72px",
+          { lineHeight: "80px", letterSpacing: "-0.01em" },
+        ],
+        "display-large": [
+          "88px",
+          { lineHeight: "96px", letterSpacing: "-0.01em" },
+        ],
+      },
+      fontWeight: {
+        regular: "400",
+        strong: "600",
+      },
+      colors: {
+        primary: {
+          50: "#e9faff",
+          100: "#cef4ff",
+          200: "#a7edff",
+          300: "#6be7ff",
+          400: "#26d4ff",
+          500: "#00afff",
+          600: "#0085ff",
+          700: "#006aff",
+          800: "#005be6",
+          900: "#0052b3",
+          950: "#002b5b",
+        },
+        secondary: {
+          50: "#faf5ff",
+          100: "#f4e8ff",
+          200: "#ead4ff",
+          300: "#dab3ff",
+          400: "#c483fd",
+          500: "#ad53f9",
+          600: "#9931ec",
+          700: "#8420d0",
+          800: "#7922b8",
+          900: "#5b1b88",
+          950: "#3e0665",
+        },
+        neutral: {
+          50: "#F9F9F9",
+          100: "#EFEFEF",
+          200: "#CDCDCD",
+          300: "#B8B8BC",
+          400: "#9E9E9E",
+          500: "#838799",
+          600: "#686F80",
+          700: "#585768",
+          800: "#45414C",
+          900: "#393933",
+        },
+        success: {
+          50: "#E8F7EE",
+          100: "#BAE7C8",
+          200: "#98DCC1",
+          300: "#80CC8E",
+          400: "#4CC278",
+          500: "#1FB356",
+          600: "#1CA34E",
+          700: "#167F3D",
+          800: "#11622F",
+          900: "#0D4B24",
+        },
+        info: {
+          50: "#E6F6FD",
+          100: "#B0E3F8",
+          200: "#8ADBF4",
+          300: "#64C3FD",
+          400: "#3388ED",
+          500: "#00A6E8",
+          600: "#0097D3",
+          700: "#0076A5",
+          800: "#005B80",
+          900: "#004661",
+        },
+        warning: {
+          50: "#FDF7E6",
+          100: "#F8E6B0",
+          200: "#F4D98A",
+          300: "#F0C854",
+          400: "#EDBD33",
+          500: "#EBAD00",
+          600: "#D38D00",
+          700: "#A57B00",
+          800: "#805F00",
+          900: "#614900",
+        },
+        error: {
+          50: "#FDEAEA",
+          100: "#F7BEBE",
+          200: "#F49F9F",
+          300: "#EE7373",
+          400: "#EB5858",
+          500: "#E62E2E",
+          600: "#D12A2A",
+          700: "#A32121",
+          800: "#7F1919",
+          900: "#611313",
+        },
+      },
+    },
+  },
+  plugins: [],
+};
