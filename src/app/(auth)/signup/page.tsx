@@ -44,18 +44,31 @@ const signUpSchema = yup
     password: yup
       .string()
       .min(8, "Password must be at least 8 characters")
+      .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
+      .matches(/[a-z]/, "Password must contain at least one lowercase letter")
+      .matches(/[0-9]/, "Password must contain at least one number")
+      .matches(
+        /[^A-Za-z0-9]/,
+        "Password must contain at least one special character"
+      )
       .required("Password is required"),
-    confirmPassword: yup.string().required("Please confirm your password"),
+    confirmPassword: yup
+      .string()
+      .oneOf([yup.ref("password")], "Passwords must match")
+      .required("Please confirm your password"),
     terms: yup.boolean().required().oneOf([true], "You must accept the terms"),
   })
   .test("passwords-match", "Passwords don't match", function (data) {
     return data.password === data.confirmPassword;
   });
-
+const passwordRequirements = [
+  "Minimum 8 characters",
+  "A mix of uppercase and lowercase letters",
+  "At least one digit",
+  "At least one special character",
+];
 export default function SignUp() {
   const router = useRouter();
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
@@ -133,12 +146,12 @@ export default function SignUp() {
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col items-start gap-5 w-full"
+        className="flex flex-col items-start w-full gap-5"
       >
-        <div className="flex flex-col items-start gap-10 w-full">
-          <div className="flex flex-col items-start justify-center gap-1 w-full">
-            <div className="flex flex-col items-start gap-5 w-full">
-              <div className="flex flex-col items-start gap-6 w-full">
+        <div className="flex flex-col items-start w-full gap-10">
+          <div className="flex flex-col items-start justify-center w-full gap-1">
+            <div className="flex flex-col items-start w-full gap-5">
+              <div className="flex flex-col items-start w-full gap-6">
                 {/* Full Name Field */}
                 <div className="flex flex-col items-start gap-1.5 w-full">
                   <div className="inline-flex items-start gap-0.5">
@@ -212,7 +225,7 @@ export default function SignUp() {
                   )}
                 </div>
 
-                <div className="flex flex-col items-start gap-4 w-full">
+                <div className="flex flex-col items-start w-full gap-4">
                   {/* Password Field */}
                   <div className="flex flex-col items-start gap-1.5 w-full">
                     <div className="inline-flex items-start gap-0.5">
@@ -264,12 +277,12 @@ export default function SignUp() {
                   </div>
 
                   {/* Terms & Conditions */}
-                  <div className="flex items-start sm:items-center gap-2 w-full">
+                  <div className="flex items-start w-full gap-2 sm:items-center">
                     <Checkbox
                       id="terms"
                       checked={watch("terms")}
                       onCheckedChange={handleTermsChange}
-                      className="w-5 h-5 rounded-md mt-1 sm:mt-0 "
+                      className="w-5 h-5 mt-1 rounded-md sm:mt-0 "
                       disabled={isSubmitting}
                     />
                     <label
@@ -286,6 +299,26 @@ export default function SignUp() {
                     <span className="text-[#e62e2e] text-sm">
                       {errors.terms.message}
                     </span>
+                  )}
+                  {errors.password && (
+                    <Card className="bg-[#eff6f9] border-none p-3 rounded-lg w-full">
+                      <CardContent className="p-0 space-y-2">
+                        <h3 className="font-semibold text-[16px] text-[#333333] leading-[24px] mt-[-1.00px]">
+                          Password must:
+                        </h3>
+
+                        <ul className="flex flex-col items-start gap-1">
+                          {passwordRequirements.map((requirement, index) => (
+                            <li
+                              key={index}
+                              className="text-[12px] text-[#6c7279] leading-[18px] font-normal list-disc list-inside"
+                            >
+                              {requirement}
+                            </li>
+                          ))}
+                        </ul>
+                      </CardContent>
+                    </Card>
                   )}
                 </div>
               </div>
