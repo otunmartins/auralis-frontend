@@ -1,27 +1,42 @@
+"use client";
+
 import React from "react";
 // import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 // import { Checkbox } from "@/components/ui/checkbox";
 // import { Input } from "@/components/ui/input";
+import { usePathname } from "next/navigation";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+
+  const getImageSrc = () => {
+    if (pathname.includes("/forgot-password")) {
+      return "/image-2.png";
+    } else if (pathname.includes("/reset-password")) {
+      return "/image-2.png";
+    } else {
+      return "/image-1.png";
+    }
+  };
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 min-h-screen bg-white rounded-3xl overflow-hidden max-w-[1920px] mx-auto">
+    <div className="max-w-full min-h-screen mx-auto overflow-hidden bg-white rounded-3xl">
       {/* Image section - hidden on mobile, shown on md and up */}
-      <div className="hidden p-6 bg-white md:flex md:flex-1">
+      <div className="fixed top-0 left-0 hidden w-1/2 h-full p-6 bg-white md:flex md:flex-1">
         <Card className="w-full h-full overflow-hidden">
           <CardContent className="h-full p-0">
             <img
               className="object-cover w-full h-full"
-              alt="Sign in background"
-              src="/image-1.png"
+              alt="Auth background"
+              src={getImageSrc()}
             />
           </CardContent>
         </Card>
       </div>
 
       {/* Form section */}
-      <div className="flex-1 flex flex-col items-center justify-center px-4 sm:px-8 md:px-12 lg:px-20 py-8 md:py-[100px] bg-white">
+      <div className="flex flex-col items-center justify-center flex-1 w-1/2 min-h-screen px-4 py-8 ml-auto bg-white sm:px-8 md:px-12 lg:px-20">
         <div className="flex flex-col items-center w-full max-w-full gap-10 md:gap-20">
           {/* Logo */}
           <div className="relative w-[80px] md:w-[100px] h-[80px] md:h-[100px]">
