@@ -36,7 +36,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </div>
 
       {/* Form section */}
-      <div className="flex flex-col items-center justify-center flex-1 w-1/2 min-h-screen px-4 py-8 ml-auto bg-white sm:px-8 md:px-12 lg:px-20">
+      <div className="flex flex-col items-center justify-center flex-1 min-h-screen px-4 py-8 ml-auto bg-white md:w-1/2 sm:px-8 md:px-12 lg:px-20">
         <div className="flex flex-col items-center w-full max-w-full gap-10 md:gap-20">
           {/* Logo */}
           <div className="relative w-[80px] md:w-[100px] h-[80px] md:h-[100px]">
