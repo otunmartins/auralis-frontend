@@ -35,7 +35,7 @@
 
 /* Phone Input Styles */
 .custom-phone-input {
-  @apply rounded-xl border border-gray-200 px-4 py-3;
+  @apply px-4 py-3 border border-gray-200 rounded-xl;
 }
 
 .custom-phone-input.error {
@@ -47,7 +47,7 @@
 }
 
 .custom-phone-input .PhoneInputInput {
-  @apply flex-1 outline-none text-gray-600 placeholder-gray-400 bg-transparent;
+  @apply flex-1 text-gray-600 placeholder-gray-400 bg-transparent outline-none;
 }
 
 /* Override default styles */
@@ -60,5 +60,25 @@
 }
 
 .PhoneInputCountrySelectArrow {
-  @apply border-t-gray-400 ml-1;
+  @apply ml-1 border-t-gray-400;
+}
+
+/* Hide scrollbars for Webkit (Chrome, Safari, Edge) */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbars for Firefox */
+.scrollbar-hide {
+  scrollbar-width: none;
+}
+
+/* Prevent unintended shifts due to scrollbar */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE 10+ */
+}
+
+.rounded-t-xl {
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
 }
