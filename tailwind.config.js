@@ -4,6 +4,8 @@ module.exports = {
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/containers/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/containers/Dashboard/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
@@ -12,63 +14,24 @@ module.exports = {
       },
       fontSize: {
         // Headings
-        "heading-xxsmall": [
-          "20px",
-          { lineHeight: "24px", letterSpacing: "0.1em" },
-        ],
-        "heading-xsmall": [
-          "22px",
-          { lineHeight: "26px", letterSpacing: "0.1em" },
-        ],
-        "heading-small": [
-          "24px",
-          { lineHeight: "32px", letterSpacing: "0.1em" },
-        ],
-        "heading-medium": [
-          "28px",
-          { lineHeight: "36.4px", letterSpacing: "-0.01em" },
-        ],
-        "heading-large": [
-          "32px",
-          { lineHeight: "44.2px", letterSpacing: "-0.01em" },
-        ],
-        "heading-xlarge": [
-          "40px",
-          { lineHeight: "52px", letterSpacing: "-0.01em" },
-        ],
+        "heading-xxsmall": ["20px", { lineHeight: "24px" }],
+        "heading-xsmall": ["22px", { lineHeight: "26px" }],
+        "heading-small": ["24px", { lineHeight: "32px" }],
+        "heading-medium": ["28px", { lineHeight: "36.4px" }],
+        "heading-large": ["32px", { lineHeight: "44.2px" }],
+        "heading-xlarge": ["40px", { lineHeight: "52px" }],
 
         // Labels
-        "label-xsmall": [
-          "12px",
-          { lineHeight: "16px", letterSpacing: "0.25em" },
-        ],
-        "label-small": [
-          "14px",
-          { lineHeight: "18.2px", letterSpacing: "0.1em" },
-        ],
-        "label-medium": [
-          "16px",
-          { lineHeight: "20.8px", letterSpacing: "0.1em" },
-        ],
-        "label-large": ["18px", { lineHeight: "23.4px", letterSpacing: "0" }],
+        "label-xsmall": ["12px", { lineHeight: "16px" }],
+        "label-small": ["14px", { lineHeight: "18.2px" }],
+        "label-medium": ["16px", { lineHeight: "20.8px" }],
+        "label-large": ["18px", { lineHeight: "23.4px" }],
 
         // Paragraphs
-        "paragraph-xsmall": [
-          "12px",
-          { lineHeight: "16px", letterSpacing: "0.25em" },
-        ],
-        "paragraph-small": [
-          "14px",
-          { lineHeight: "22.4px", letterSpacing: "0.25em" },
-        ],
-        "paragraph-medium": [
-          "16px",
-          { lineHeight: "25.6px", letterSpacing: "0.1em" },
-        ],
-        "paragraph-large": [
-          "18px",
-          { lineHeight: "28.8px", letterSpacing: "0" },
-        ],
+        "paragraph-xsmall": ["12px", { lineHeight: "16px" }],
+        "paragraph-small": ["14px", { lineHeight: "22.4px" }],
+        "paragraph-medium": ["16px", { lineHeight: "25.6px" }],
+        "paragraph-large": ["18px", { lineHeight: "28.8px" }],
 
         // Display
         "display-small": [

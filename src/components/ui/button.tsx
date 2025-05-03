@@ -24,6 +24,7 @@ const buttonVariants = cva(
         ghost:
           "text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 focus-visible:ring-neutral-600",
         disabled: "bg-neutral-100  cursor-not-allowed",
+        simple: "bg-white rounded-lg !text-neutral-400",
       },
       size: {
         sm: "h-9 px-4 text-label-small [&>svg]:size-4",

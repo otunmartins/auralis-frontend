@@ -16,48 +16,58 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import {
+  AccountManagementIcon,
+  DashboardIcon,
+  FileUploadIcon,
+  PredictionIcon,
+  SupportIcon,
+  LoggingIcon,
+  InsightsIcon,
+  UserCaseIcon,
+} from "./icons";
 
 const menuItems = [
   {
     title: "Dashboard",
     href: "/dashboard",
-    icon: LayoutDashboard,
+    icon: DashboardIcon,
   },
   {
     title: "Account Management",
     href: "/account",
-    icon: Users,
+    icon: AccountManagementIcon,
   },
   {
     title: "File Upload",
     href: "/upload",
-    icon: Upload,
+    icon: FileUploadIcon,
   },
   {
     title: "Predictions",
     href: "/predictions",
-    icon: LineChart,
+    icon: PredictionIcon,
   },
   {
     title: "Insights and Visualization",
     href: "/insights",
-    icon: BarChart3,
+    icon: InsightsIcon,
   },
   {
     title: "Logging System",
     href: "/logs",
-    icon: History,
+    icon: LoggingIcon,
   },
   {
     title: "User Case Templates",
     href: "/templates",
-    icon: FileText,
+    icon: UserCaseIcon,
   },
-  {
-    title: "Feedbacks & Support",
-    href: "/support",
-    icon: HelpCircle,
-  },
+  // {
+  //   title: "Feedbacks & Support",
+  //   href: "/support",
+  //   icon: SupportIcon,
+  // },
 ];
 
 export function Sidebar() {
@@ -67,8 +77,8 @@ export function Sidebar() {
   return (
     <div
       className={cn(
-        "flex flex-col rounded-[18px] h-full bg-white border-r border-gray-100 transition-all duration-300",
-        collapsed ? "w-20" : "w-64"
+        "flex flex-col rounded-[18px]  bg-white border-r border-gray-100 transition-all duration-300  sticky top-[18px] bottom-[18px] left-0 max-h-[calc(100vh-36px)]  ",
+        collapsed ? "w-20" : "w-[274px]"
       )}
     >
       {/* Logo and toggle */}
@@ -104,35 +114,51 @@ export function Sidebar() {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 pt-4">
-        <ul className="space-y-1">
-          {menuItems.map((item) => {
-            const isActive = pathname === item.href;
-            return (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  className={cn(
-                    "flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors",
-                    isActive && "bg-[#EDF8FF] text-primary-800 ",
-                    collapsed && "justify-center"
-                  )}
-                >
-                  <item.icon
+      <nav className="flex-1 pt-4 overflow-y-auto scrollbar-hide">
+        <ul className={cn("space-y-1", collapsed ? "px-0" : "px-4")}>
+          <div className="space-y-1">
+            {menuItems.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
                     className={cn(
-                      "h-5 w-5 flex-shrink-0",
-                      isActive && "text-blue-600"
+                      "flex items-center rounded-lg px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors",
+                      isActive && "bg-[#EDF8FF] text-primary-800 ",
+                      collapsed && "justify-center rounded-none"
                     )}
-                  />
-                  {!collapsed && (
-                    <span className="ml-3 text-sm font-medium">
-                      {item.title}
-                    </span>
-                  )}
-                </Link>
-              </li>
-            );
-          })}
+                  >
+                    <item.icon
+                      className={cn(
+                        "h-5 w-5 flex-shrink-0",
+                        isActive && "text-blue-600"
+                      )}
+                    />
+                    {!collapsed && (
+                      <span className="ml-3 text-sm font-medium">
+                        {item.title}
+                      </span>
+                    )}
+                  </Link>
+                </li>
+              );
+            })}
+          </div>
+          <div>
+            <Link
+              href={"item.href"}
+              className={cn(
+                "flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors",
+                collapsed && "justify-center"
+              )}
+            >
+              <SupportIcon />
+              {!collapsed && (
+                <span className="ml-3 text-sm font-medium">Support</span>
+              )}
+            </Link>
+          </div>
         </ul>
       </nav>
     </div>
