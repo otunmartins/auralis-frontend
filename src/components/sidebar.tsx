@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -35,12 +35,12 @@ const menuItems = [
   },
   {
     title: "Account Management",
-    href: "/account",
+    href: "/account-management",
     icon: AccountManagementIcon,
   },
   {
     title: "File Upload",
-    href: "/upload",
+    href: "/file-upload",
     icon: FileUploadIcon,
   },
   {
@@ -73,25 +73,39 @@ const menuItems = [
 export function Sidebar() {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
+  const [isLargeScreen, setIsLargeScreen] = useState(false);
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsLargeScreen(window.innerWidth <= 1024);
+      if (window.innerWidth <= 1024) {
+        setCollapsed(true);
+      }
+    };
+
+    // Initial check
+    checkScreenSize();
+
+    // Add event listener
+    window.addEventListener("resize", checkScreenSize);
+
+    // Cleanup
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
 
   return (
     <div
       className={cn(
-        "flex flex-col rounded-[18px]  bg-white border-r border-gray-100 transition-all duration-300  sticky top-[18px] bottom-[18px] left-0 max-h-[calc(100vh-36px)]  ",
-        collapsed ? "w-20" : "w-[274px]"
+        "flex flex-col rounded-[18px] max-sm:rounded-xl  bg-white border-r border-gray-100 transition-all duration-300  sticky top-[18px] bottom-[18px] max-sm:top-2 max-sm:bottom-2 left-0 max-h-[calc(100vh-36px)] max-sm:max-h-[calc(100vh-16px)] ",
+        collapsed ? "w-20 max-sm:w-12" : "w-[274px]"
       )}
     >
       {/* Logo and toggle */}
-      <div className="relative flex items-center justify-between p-4">
-        <div className="flex items-center">
+      <div className="relative flex items-center justify-between p-4 max-sm:px-1 max-sm:pb-0">
+        <div className="flex items-center w-full max-sm:justify-center">
           <div className="flex-shrink-0">
-            <div className="flex items-center justify-center ">
-              <Image
-                src="/logo.png"
-                alt="AuralisBio Logo"
-                width={43}
-                height={43}
-              />
+            <div className="flex relative w-[43px] h-[43px] max-sm:w-7 max-sm:h-7 items-center justify-center ">
+              <Image src="/logo.png" alt="AuralisBio Logo" fill />
             </div>
           </div>
           {!collapsed && (
@@ -100,17 +114,19 @@ export function Sidebar() {
             </span>
           )}
         </div>
-        <button
-          onClick={() => setCollapsed(!collapsed)}
-          className="absolute p-1 text-white rounded-full -right-[14px] bg-primary-950 hover:bg-primary-900 "
-        >
-          <ChevronLeft
-            className={cn(
-              "h-5 w-5 transition-transform",
-              collapsed && "rotate-180"
-            )}
-          />
-        </button>
+        {!isLargeScreen && (
+          <button
+            onClick={() => setCollapsed(!collapsed)}
+            className="absolute p-1 text-white rounded-full -right-[14px] bg-primary-950 hover:bg-primary-900"
+          >
+            <ChevronLeft
+              className={cn(
+                "h-5 w-5 transition-transform",
+                collapsed && "rotate-180"
+              )}
+            />
+          </button>
+        )}
       </div>
 
       {/* Navigation */}

@@ -446,3 +446,63 @@ export const ShareIcon = ({
     ></path>
   </svg>
 );
+
+export const UploadIcon = ({
+  size = 64,
+  className = "",
+  ...props
+}: SvgIconProps) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    fill="none"
+    viewBox="0 0 64 65"
+    className={className}
+    {...props}
+  >
+    <g clipPath="url(#clip0_62229_42815)">
+      <rect width="64" height="64" y="0.5" fill="#F8F8F8" rx="32"></rect>
+      <rect
+        width="67.672"
+        height="67.672"
+        x="-1.939"
+        y="-1.535"
+        fill="#fff"
+        rx="33.836"
+      ></rect>
+      <path
+        stroke="url(#paint0_linear_62229_42815)"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2.82"
+        d="m26.257 37.94 5.64-5.64m0 0 5.64 5.64m-5.64-5.64v12.69m11.279-6.003a7.754 7.754 0 0 0-4.934-13.736.87.87 0 0 1-.754-.425 10.57 10.57 0 0 0-9.116-5.214c-5.84 0-10.574 4.734-10.574 10.574a10.54 10.54 0 0 0 3.084 7.463"
+      ></path>
+    </g>
+    <rect
+      width="63"
+      height="63"
+      x="0.5"
+      y="1"
+      stroke="#00A6E8"
+      strokeOpacity="0.1"
+      rx="31.5"
+    ></rect>
+    <defs>
+      <linearGradient
+        id="paint0_linear_62229_42815"
+        x1="17.798"
+        x2="40.815"
+        y1="19.612"
+        y2="47.41"
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop stopColor="#0370C2"></stop>
+        <stop offset="1" stopColor="#4BB2FE" stopOpacity="0.68"></stop>
+      </linearGradient>
+      <clipPath id="clip0_62229_42815">
+        <rect width="64" height="64" y="0.5" fill="#fff" rx="32"></rect>
+      </clipPath>
+    </defs>
+  </svg>
+);

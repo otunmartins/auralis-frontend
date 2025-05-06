@@ -20,7 +20,7 @@ export default function Header() {
   return (
     <header className="w-full ">
       <div className="w-full rounded-[18px] bg-white flex items-center justify-between py-4 px-[18px] mx-auto">
-        <div className="relative flex items-center w-full max-w-md">
+        <div className="relative flex items-center w-full max-w-md ">
           <Search className="absolute w-4 h-4 left-3 text-muted-foreground" />
           <Input
             type="search"

@@ -49,7 +49,10 @@ module.exports = {
       },
       fontWeight: {
         regular: "400",
+        medium: "500",
         strong: "600",
+        bold: "700",
+        extraBold: "800",
       },
       colors: {
         primary: {
@@ -137,6 +140,12 @@ module.exports = {
           700: "#A32121",
           800: "#7F1919",
           900: "#611313",
+        },
+        grey: {
+          lighter: "#A4A7AE",
+          light: "#eeeeee",
+          mediumDark: "#6D727A",
+          dark: "#333333",
         },
       },
     },
