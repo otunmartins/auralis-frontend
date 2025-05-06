@@ -30,7 +30,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
+            className="absolute -translate-y-1/2 cursor-pointer right-3 top-1/2"
           >
             {showPassword ? (
               <EyeIcon className="h-[18px] w-[18px] text-gray-500" />
