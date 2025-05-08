@@ -1,6 +1,8 @@
 import MetricCard from "@/components/matricCard";
 import { BarChart } from "@/components/barChart";
 import { PieChart } from "@/components/pieChart";
+import RiskLevelDonutChart from "@/components/pieChartTest";
+import ConfidenceScoreBarChart from "@/components/confidenceScoreBarChart";
 
 export default function PredictionSummaryPage() {
   return (
@@ -21,10 +23,12 @@ export default function PredictionSummaryPage() {
       </div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <div className="col-span-2">
-          <BarChart />
+          {/* <BarChart /> */}
+          <ConfidenceScoreBarChart />
         </div>
         <div className="col-span-1">
-          <PieChart />
+          {/* <PieChart /> */}
+          <RiskLevelDonutChart />
         </div>
       </div>
     </>

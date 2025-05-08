@@ -37,152 +37,167 @@ const ConfidenceScoreTrend = () => {
     const svg = d3.select(ref.current);
     svg.selectAll("*").remove();
 
-    // Get container width
-    const containerWidth = containerRef.current?.clientWidth || 800;
+    // Create ResizeObserver to track container size changes
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const containerWidth = entry.contentRect.width;
 
-    const margin = { top: 30, right: 30, bottom: 50, left: 50 };
-    const width = containerWidth - margin.left - margin.right;
-    const height = 400;
+        // Clear previous visualization
+        svg.selectAll("*").remove();
 
-    const x = d3.scalePoint().domain(models).range([0, width]).padding(0.5);
-    const y = d3
-      .scaleLinear()
-      .domain([0, 100])
-      .range([height - margin.top - margin.bottom, 0]);
+        const margin = { top: 30, right: 30, bottom: 50, left: 50 };
+        const width = containerWidth - margin.left - margin.right;
+        const height = 400;
 
-    const line = d3
-      .line<any>()
-      .x((d) => x(d.model)!)
-      .y((d) => y(d.confidence))
-      .curve(d3.curveBasis); // smoother curve for better match to design
+        const x = d3.scalePoint().domain(models).range([0, width]).padding(0.5);
+        const y = d3
+          .scaleLinear()
+          .domain([0, 100])
+          .range([height - margin.top - margin.bottom, 0]);
 
-    const g = svg
-      .attr("width", containerWidth)
-      .attr("height", height)
-      .append("g")
-      .attr("transform", `translate(${margin.left},${margin.top})`);
+        const line = d3
+          .line<any>()
+          .x((d) => x(d.model)!)
+          .y((d) => y(d.confidence))
+          .curve(d3.curveBasis);
 
-    // Add background
-    g.append("rect")
-      .attr("width", width)
-      .attr("height", height - margin.top - margin.bottom)
-      .attr("fill", "#FFF")
-      .attr("stroke", "none");
+        const g = svg
+          .attr("width", containerWidth)
+          .attr("height", height)
+          .append("g")
+          .attr("transform", `translate(${margin.left},${margin.top})`);
 
-    // Add grid lines
-    // Vertical grid lines
-    g.selectAll("vlines")
-      .data(models)
-      .enter()
-      .append("line")
-      .attr("x1", (d) => x(d)!)
-      .attr("y1", 0)
-      .attr("x2", (d) => x(d)!)
-      .attr("y2", height - margin.top - margin.bottom)
-      .attr("stroke", "#f0f0f0")
-      .attr("stroke-width", 1);
+        // Add background
+        g.append("rect")
+          .attr("width", width)
+          .attr("height", height - margin.top - margin.bottom)
+          .attr("fill", "#FFF")
+          .attr("stroke", "none");
 
-    // Horizontal grid lines
-    const yTicks = y.ticks(10);
-    g.selectAll("hlines")
-      .data(yTicks)
-      .enter()
-      .append("line")
-      .attr("x1", 0)
-      .attr("y1", (d) => y(d))
-      .attr("x2", width)
-      .attr("y2", (d) => y(d))
-      .attr("stroke", "#f0f0f0")
-      .attr("stroke-width", 1);
+        // Add grid lines
+        // Vertical grid lines
+        g.selectAll("vlines")
+          .data(models)
+          .enter()
+          .append("line")
+          .attr("x1", (d) => x(d)!)
+          .attr("y1", 0)
+          .attr("x2", (d) => x(d)!)
+          .attr("y2", height - margin.top - margin.bottom)
+          .attr("stroke", "#f0f0f0")
+          .attr("stroke-width", 1);
 
-    // Y Axis
-    g.append("g")
-      .call(
-        d3
-          .axisLeft(y)
-          .ticks(10)
-          .tickFormat((d) => `${d}%`)
-      )
-      .selectAll("text")
-      .style("font-size", "12px");
+        // Horizontal grid lines
+        const yTicks = y.ticks(10);
+        g.selectAll("hlines")
+          .data(yTicks)
+          .enter()
+          .append("line")
+          .attr("x1", 0)
+          .attr("y1", (d) => y(d))
+          .attr("x2", width)
+          .attr("y2", (d) => y(d))
+          .attr("stroke", "#f0f0f0")
+          .attr("stroke-width", 1);
 
-    // X Axis
-    g.append("g")
-      .attr("transform", `translate(0, ${height - margin.top - margin.bottom})`)
-      .call(d3.axisBottom(x))
-      .selectAll("text")
-      .style("font-size", "12px");
+        // Y Axis
+        g.append("g")
+          .call(
+            d3
+              .axisLeft(y)
+              .ticks(10)
+              .tickFormat((d) => `${d}%`)
+          )
+          .selectAll("text")
+          .style("font-size", "12px");
 
-    // Line Path
-    g.append("path")
-      .datum(data)
-      .attr("fill", "none")
-      .attr("stroke", "#F94144")
-      .attr("stroke-width", 3)
-      .attr("d", line);
+        // X Axis
+        g.append("g")
+          .attr(
+            "transform",
+            `translate(0, ${height - margin.top - margin.bottom})`
+          )
+          .call(d3.axisBottom(x))
+          .selectAll("text")
+          .style("font-size", "12px");
 
-    // Create tooltip div
-    const tooltip = d3
-      .select("body")
-      .append("div")
-      .attr("class", "tooltip")
-      .style("position", "absolute")
-      .style("visibility", "hidden")
-      .style("background-color", "#333")
-      .style("color", "white")
-      .style("padding", "10px")
-      .style("border-radius", "5px")
-      .style("pointer-events", "none")
-      .style("font-size", "14px")
-      .style("z-index", "1000")
-      .style("box-shadow", "0 0 10px rgba(0,0,0,0.25)");
+        // Line Path
+        g.append("path")
+          .datum(data)
+          .attr("fill", "none")
+          .attr("stroke", "#F94144")
+          .attr("stroke-width", 3)
+          .attr("d", line);
 
-    // Create an invisible overlay to handle hover on the line
-    g.append("rect")
-      .attr("width", width)
-      .attr("height", height - margin.top - margin.bottom)
-      .style("fill", "none")
-      .style("pointer-events", "all")
-      .on("mousemove", function (event) {
-        const [mouseX] = d3.pointer(event);
+        // Create tooltip div
+        const tooltip = d3
+          .select("body")
+          .append("div")
+          .attr("class", "tooltip")
+          .style("position", "absolute")
+          .style("visibility", "hidden")
+          .style("background-color", "#333")
+          .style("color", "white")
+          .style("padding", "10px")
+          .style("border-radius", "5px")
+          .style("pointer-events", "none")
+          .style("font-size", "14px")
+          .style("z-index", "1000")
+          .style("box-shadow", "0 0 10px rgba(0,0,0,0.25)");
 
-        // Find closest point on x-axis
-        const domain = x.domain();
-        const range = x.range();
-        const step = range[1] / domain.length;
-        const index = Math.min(
-          domain.length - 1,
-          Math.max(0, Math.floor(mouseX / step))
-        );
+        // Create an invisible overlay to handle hover on the line
+        g.append("rect")
+          .attr("width", width)
+          .attr("height", height - margin.top - margin.bottom)
+          .style("fill", "none")
+          .style("pointer-events", "all")
+          .on("mousemove", function (event) {
+            const [mouseX] = d3.pointer(event);
 
-        const d = data[index];
+            // Find closest point on x-axis
+            const domain = x.domain();
+            const range = x.range();
+            const step = range[1] / domain.length;
+            const index = Math.min(
+              domain.length - 1,
+              Math.max(0, Math.floor(mouseX / step))
+            );
 
-        if (d) {
-          tooltip.style("visibility", "visible").html(`
-              <div style="font-weight: bold; margin-bottom: 5px;">
-                <div>Molecule: <span style="color: white;">${d.model}</span></div>
-                <div>Confidence: <span style="color: white;">${d.confidence}%</span></div>
-              </div>
-            `);
+            const d = data[index];
 
-          // Position the tooltip near the mouse but not directly under it
-          tooltip
-            .style("top", event.pageY - 10 + "px")
-            .style("left", event.pageX + 10 + "px");
-        }
-      })
-      .on("mouseout", function () {
-        tooltip.style("visibility", "hidden");
-      });
+            if (d) {
+              tooltip.style("visibility", "visible").html(`
+                  <div style="font-weight: bold; margin-bottom: 5px;">
+                    <div>Molecule: <span style="color: white;">${d.model}</span></div>
+                    <div>Confidence: <span style="color: white;">${d.confidence}%</span></div>
+                  </div>
+                `);
 
-    // Clean up the tooltip when component unmounts
+              tooltip
+                .style("top", event.pageY - 10 + "px")
+                .style("left", event.pageX + 10 + "px");
+            }
+          })
+          .on("mouseout", function () {
+            tooltip.style("visibility", "hidden");
+          });
+      }
+    });
+
+    // Start observing the container
+    if (containerRef.current) {
+      resizeObserver.observe(containerRef.current);
+    }
+
+    // Clean up
     return () => {
+      resizeObserver.disconnect();
       d3.select("body").selectAll(".tooltip").remove();
     };
   }, []);
 
   return (
-    <div className="bg-white shadow-lg rounded-xl">
+    <div className="w-full bg-white shadow-lg rounded-xl">
       <CardHeader className="flex flex-row items-center justify-between w-full p-6">
         <h2 className="mb-4 text-xl font-semibold">Confidence Score Trend</h2>
 
@@ -213,7 +228,7 @@ const ConfidenceScoreTrend = () => {
         </div>
       </CardHeader>
       <div className="w-full" ref={containerRef}>
-        <div className="w-full overflow-auto">
+        <div className="w-full">
           <svg ref={ref} style={{ width: "100%", height: "400px" }}></svg>
         </div>
       </div>

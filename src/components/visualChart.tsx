@@ -214,44 +214,46 @@ const MolecularFeatureHeatmap = () => {
   const xLabels = [...new Set(data.map((d) => d.x))];
   const yLabels = [...new Set(data.map((d) => d.y))];
 
-  useEffect(() => {
+  const colorScale = (val: number) => {
+    if (val >= 6) return "#F94144"; // High
+    if (val >= 5) return "#08D720"; // Medium
+    if (val >= 4) return "#FFCC00"; // Low
+    return "#F5F5F5"; // Medium
+  };
+
+  const drawChart = () => {
+    if (!ref.current || !containerRef.current) return;
+
     const svg = d3.select(ref.current);
     svg.selectAll("*").remove();
 
-    // Get container width
-    const containerWidth = containerRef.current?.clientWidth || 800;
+    const containerWidth = containerRef.current.clientWidth;
+    const isSmallScreen = window.innerWidth <= 768;
+    const containerHeight = isSmallScreen
+      ? 300
+      : Math.min(500, window.innerHeight * 0.7);
 
-    const margin = { top: 20, right: 30, bottom: 50, left: 150 };
-    const height = 500; // Fixed height of 500px
-    const availableWidth = containerWidth - margin.left - margin.right;
-    const cellWidth = availableWidth / xLabels.length;
-    const cellHeight = (height - margin.top - margin.bottom) / yLabels.length;
-
-    const colorScale = (val: number) => {
-      if (val >= 6) return "#F94144"; // High
-      if (val >= 5) return "#08D720"; // Medium
-      if (val >= 4) return "#FFCC00"; // Low
-      return "#F5F5F5"; // Medium
+    const margin = {
+      top: 20,
+      right: 30,
+      bottom: 50,
+      left: Math.min(150, containerWidth * 0.2),
     };
 
-    const x = d3
-      .scaleBand()
-      .domain(xLabels)
-      .range([0, availableWidth])
-      .padding(0.05);
-    const y = d3
-      .scaleBand()
-      .domain(yLabels)
-      .range([0, height - margin.top - margin.bottom])
-      .padding(0.05);
+    const width = containerWidth - margin.left - margin.right;
+    const height = containerHeight - margin.top - margin.bottom;
 
-    const g = svg
+    const x = d3.scaleBand().domain(xLabels).range([0, width]).padding(0.05);
+
+    const y = d3.scaleBand().domain(yLabels).range([0, height]).padding(0.05);
+
+    const svgElement = svg
       .attr("width", containerWidth)
-      .attr("height", height)
+      .attr("height", containerHeight)
       .append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
 
-    // Create tooltip div
+    // Create tooltip
     const tooltip = d3
       .select("body")
       .append("div")
@@ -267,8 +269,9 @@ const MolecularFeatureHeatmap = () => {
       .style("z-index", "1000")
       .style("box-shadow", "0 0 10px rgba(0,0,0,0.25)");
 
-    // Rectangles
-    g.selectAll()
+    // Draw cells
+    svgElement
+      .selectAll()
       .data(data)
       .enter()
       .append("rect")
@@ -280,24 +283,22 @@ const MolecularFeatureHeatmap = () => {
       .style("stroke", "#fff")
       .on("mouseover", function (event, d) {
         tooltip.style("visibility", "visible").html(`
-            <div style="font-weight: bold; margin-bottom: 5px;">
-              <div>Molecule: <span style="color: white;">${d.x}</span></div>
-              <div>Feature: <span style="color: white;">${d.y}</span></div>
-              <div>Value: <span style="color: white;">${d.value}</span></div>
-              <div>Confidence Score: <span style="color: white;">${
-                d.confidence
-              }%</span></div>
-              <div>Risk Level: <span style="color: ${
-                d.risk === "High"
-                  ? "#F94144"
-                  : d.risk === "Medium"
-                  ? "#08D720"
-                  : "#FFCC00"
-              };">${d.risk}</span></div>
-            </div>
-          `);
-
-        // Position the tooltip near the mouse but not directly under it
+          <div style="font-weight: bold; margin-bottom: 5px;">
+            <div>Molecule: <span style="color: white;">${d.x}</span></div>
+            <div>Feature: <span style="color: white;">${d.y}</span></div>
+            <div>Value: <span style="color: white;">${d.value}</span></div>
+            <div>Confidence Score: <span style="color: white;">${
+              d.confidence
+            }%</span></div>
+            <div>Risk Level: <span style="color: ${
+              d.risk === "High"
+                ? "#F94144"
+                : d.risk === "Medium"
+                ? "#08D720"
+                : "#FFCC00"
+            };">${d.risk}</span></div>
+          </div>
+        `);
         tooltip
           .style("top", event.pageY - 10 + "px")
           .style("left", event.pageX + 10 + "px");
@@ -311,8 +312,10 @@ const MolecularFeatureHeatmap = () => {
         tooltip.style("visibility", "hidden");
       });
 
-    // Text inside cells
-    g.selectAll()
+    // Add cell values
+    const fontSize = Math.min(12, Math.min(x.bandwidth(), y.bandwidth()) / 2);
+    svgElement
+      .selectAll()
       .data(data)
       .enter()
       .append("text")
@@ -321,25 +324,42 @@ const MolecularFeatureHeatmap = () => {
       .attr("text-anchor", "middle")
       .attr("alignment-baseline", "middle")
       .style("fill", "#000")
-      .style("font-size", "12px")
+      .style("font-size", `${fontSize}px`)
       .text((d) => d.value);
 
-    // Y Axis
-    g.append("g")
+    // Add axes
+    const axisFontSize = Math.min(13, containerWidth * 0.015);
+
+    // Y-axis
+    svgElement
+      .append("g")
       .call(d3.axisLeft(y).tickSize(0))
       .selectAll("text")
-      .style("font-size", "13px");
+      .style("font-size", `${axisFontSize}px`);
 
-    // X Axis at bottom
-    g.append("g")
-      .attr("transform", `translate(0, ${y.range()[1]})`)
+    // X-axis
+    svgElement
+      .append("g")
+      .attr("transform", `translate(0, ${height})`)
       .call(d3.axisBottom(x).tickSize(0))
       .selectAll("text")
       .style("text-anchor", "middle")
-      .style("font-size", "13px");
+      .style("font-size", `${axisFontSize}px`);
+  };
 
-    // Clean up the tooltip when component unmounts
+  useEffect(() => {
+    drawChart();
+
+    const resizeObserver = new ResizeObserver(() => {
+      drawChart();
+    });
+
+    if (containerRef.current) {
+      resizeObserver.observe(containerRef.current);
+    }
+
     return () => {
+      resizeObserver.disconnect();
       d3.select("body").selectAll(".tooltip").remove();
     };
   }, []);
@@ -379,10 +399,13 @@ const MolecularFeatureHeatmap = () => {
       </CardHeader>
       <div className="w-full" ref={containerRef}>
         <div className="w-full overflow-auto">
-          <svg ref={ref} style={{ width: "100%", height: "500px" }}></svg>
+          <svg
+            ref={ref}
+            style={{ width: "100%", height: "auto", minHeight: "300px" }}
+          ></svg>
         </div>
       </div>
-      <div className="flex items-center justify-center w-full gap-4 p-6 pt-0 text-sm">
+      <div className="flex flex-wrap items-center justify-center w-full gap-4 p-6 pt-0 text-sm">
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 bg-yellow-400" /> Low Risk
         </div>

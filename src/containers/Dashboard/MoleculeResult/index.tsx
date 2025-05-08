@@ -6,6 +6,7 @@ import { MoleculeData, initialData } from "@/siteData/moleculeData";
 import { CheckFilledIcon, XFilledIcon } from "@/components/icons";
 import { useRouter } from "next/navigation";
 import ConfidenceScoreChart from "@/components/confidenceChart";
+import ConfidenceAreaChart from "@/components/confidenceAreaChart";
 interface MoleculeDetailProps {
   moleculeId?: string;
 }
@@ -160,7 +161,8 @@ const MoleculeResult = ({ moleculeId }: MoleculeDetailProps) => {
 
       {/* Additional molecule information sections */}
       <div className="w-full mt-2">
-        <ConfidenceScoreChart />
+        {/* <ConfidenceScoreChart /> */}
+        <ConfidenceAreaChart />
       </div>
     </div>
   );

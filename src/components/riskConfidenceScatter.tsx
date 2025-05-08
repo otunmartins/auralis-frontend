@@ -231,141 +231,160 @@ const RiskConfidenceScatter = () => {
     const svg = d3.select(ref.current);
     svg.selectAll("*").remove();
 
-    // Get container width
-    const containerWidth = containerRef.current?.clientWidth || 800;
+    // Create ResizeObserver to track container size changes
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const containerWidth = entry.contentRect.width;
 
-    const margin = { top: 30, right: 30, bottom: 50, left: 50 };
-    const width = containerWidth - margin.left - margin.right;
-    const height = 400;
+        // Clear previous visualization
+        svg.selectAll("*").remove();
 
-    const x = d3.scalePoint().domain(models).range([0, width]).padding(0.5);
-    const y = d3
-      .scaleLinear()
-      .domain([0, 100])
-      .range([height - margin.top - margin.bottom, 0]);
+        const margin = { top: 30, right: 30, bottom: 50, left: 50 };
+        const width = containerWidth - margin.left - margin.right;
+        const height = 400;
 
-    const g = svg
-      .attr("width", containerWidth)
-      .attr("height", height)
-      .append("g")
-      .attr("transform", `translate(${margin.left},${margin.top})`);
+        const x = d3.scalePoint().domain(models).range([0, width]).padding(0.5);
+        const y = d3
+          .scaleLinear()
+          .domain([0, 100])
+          .range([height - margin.top - margin.bottom, 0]);
 
-    // Add background
-    g.append("rect")
-      .attr("width", width)
-      .attr("height", height - margin.top - margin.bottom)
-      .attr("fill", "#FFF")
-      .attr("stroke", "none");
+        const g = svg
+          .attr("width", containerWidth)
+          .attr("height", height)
+          .append("g")
+          .attr("transform", `translate(${margin.left},${margin.top})`);
 
-    // Add grid lines
-    // Vertical grid lines
-    g.selectAll("vlines")
-      .data(models)
-      .enter()
-      .append("line")
-      .attr("x1", (d) => x(d)!)
-      .attr("y1", 0)
-      .attr("x2", (d) => x(d)!)
-      .attr("y2", height - margin.top - margin.bottom)
-      .attr("stroke", "#f0f0f0")
-      .attr("stroke-width", 1);
+        // Add background
+        g.append("rect")
+          .attr("width", width)
+          .attr("height", height - margin.top - margin.bottom)
+          .attr("fill", "#FFF")
+          .attr("stroke", "none");
 
-    // Horizontal grid lines
-    const yTicks = y.ticks(10);
-    g.selectAll("hlines")
-      .data(yTicks)
-      .enter()
-      .append("line")
-      .attr("x1", 0)
-      .attr("y1", (d) => y(d))
-      .attr("x2", width)
-      .attr("y2", (d) => y(d))
-      .attr("stroke", "#f0f0f0")
-      .attr("stroke-width", 1);
+        // Add grid lines
+        // Vertical grid lines
+        g.selectAll("vlines")
+          .data(models)
+          .enter()
+          .append("line")
+          .attr("x1", (d) => x(d)!)
+          .attr("y1", 0)
+          .attr("x2", (d) => x(d)!)
+          .attr("y2", height - margin.top - margin.bottom)
+          .attr("stroke", "#f0f0f0")
+          .attr("stroke-width", 1);
 
-    // Create tooltip div
-    const tooltip = d3
-      .select("body")
-      .append("div")
-      .attr("class", "tooltip")
-      .style("position", "absolute")
-      .style("visibility", "hidden")
-      .style("background-color", "#333")
-      .style("color", "white")
-      .style("padding", "10px")
-      .style("border-radius", "5px")
-      .style("pointer-events", "none")
-      .style("font-size", "14px")
-      .style("z-index", "1000")
-      .style("box-shadow", "0 0 10px rgba(0,0,0,0.25)");
+        // Horizontal grid lines
+        const yTicks = y.ticks(10);
+        g.selectAll("hlines")
+          .data(yTicks)
+          .enter()
+          .append("line")
+          .attr("x1", 0)
+          .attr("y1", (d) => y(d))
+          .attr("x2", width)
+          .attr("y2", (d) => y(d))
+          .attr("stroke", "#f0f0f0")
+          .attr("stroke-width", 1);
 
-    // Y Axis
-    g.append("g")
-      .call(
-        d3
-          .axisLeft(y)
-          .ticks(10)
-          .tickFormat((d) => `${d}%`)
-      )
-      .selectAll("text")
-      .style("font-size", "12px");
+        // Create tooltip div
+        const tooltip = d3
+          .select("body")
+          .append("div")
+          .attr("class", "tooltip")
+          .style("position", "absolute")
+          .style("visibility", "hidden")
+          .style("background-color", "#333")
+          .style("color", "white")
+          .style("padding", "10px")
+          .style("border-radius", "5px")
+          .style("pointer-events", "none")
+          .style("font-size", "14px")
+          .style("z-index", "1000")
+          .style("box-shadow", "0 0 10px rgba(0,0,0,0.25)");
 
-    // X Axis
-    g.append("g")
-      .attr("transform", `translate(0, ${height - margin.top - margin.bottom})`)
-      .call(d3.axisBottom(x))
-      .selectAll("text")
-      .style("font-size", "12px");
+        // Y Axis
+        g.append("g")
+          .call(
+            d3
+              .axisLeft(y)
+              .ticks(10)
+              .tickFormat((d) => `${d}%`)
+          )
+          .selectAll("text")
+          .style("font-size", "12px");
 
-    // Dots
-    g.selectAll()
-      .data(processedData)
-      .enter()
-      .append("circle")
-      .attr("cx", (d) => x(d.model)!)
-      .attr("cy", (d) => y(d.confidence))
-      .attr("r", 6)
-      .style("fill", (d) => riskColor[d.risk])
-      .style("opacity", 0.9)
-      .on("mouseover", function (event, d) {
-        tooltip.style("visibility", "visible").html(`
-            <div style="font-weight: bold; margin-bottom: 5px;">
-              <div>Molecule: <span style="color: white;">${d.model}</span></div>
-              <div>Feature: <span style="color: white;">${
-                d.feature
-              }</span></div>
-              <div>Value: <span style="color: white;">${d.value}</span></div>
-              <div>Confidence Score: <span style="color: white;">${
-                d.confidence
-              }%</span></div>
-              <div>Risk Level: <span style="color: ${
-                riskColor[d.risk]
-              };">${d.risk.charAt(0).toUpperCase() + d.risk.slice(1)}</span></div>
-            </div>
-          `);
+        // X Axis
+        g.append("g")
+          .attr(
+            "transform",
+            `translate(0, ${height - margin.top - margin.bottom})`
+          )
+          .call(d3.axisBottom(x))
+          .selectAll("text")
+          .style("font-size", "12px");
 
-        // Position the tooltip near the mouse but not directly under it
-        tooltip
-          .style("top", event.pageY - 10 + "px")
-          .style("left", event.pageX + 10 + "px");
-      })
-      .on("mousemove", function (event) {
-        tooltip
-          .style("top", event.pageY - 10 + "px")
-          .style("left", event.pageX + 10 + "px");
-      })
-      .on("mouseout", function () {
-        tooltip.style("visibility", "hidden");
-      });
+        // Dots
+        g.selectAll()
+          .data(processedData)
+          .enter()
+          .append("circle")
+          .attr("cx", (d) => x(d.model)!)
+          .attr("cy", (d) => y(d.confidence))
+          .attr("r", 6)
+          .style("fill", (d) => riskColor[d.risk])
+          .style("opacity", 0.9)
+          .on("mouseover", function (event, d) {
+            tooltip.style("visibility", "visible").html(`
+                <div style="font-weight: bold; margin-bottom: 5px;">
+                  <div>Molecule: <span style="color: white;">${
+                    d.model
+                  }</span></div>
+                  <div>Feature: <span style="color: white;">${
+                    d.feature
+                  }</span></div>
+                  <div>Value: <span style="color: white;">${
+                    d.value
+                  }</span></div>
+                  <div>Confidence Score: <span style="color: white;">${
+                    d.confidence
+                  }%</span></div>
+                  <div>Risk Level: <span style="color: ${
+                    riskColor[d.risk]
+                  };">${d.risk.charAt(0).toUpperCase() + d.risk.slice(1)}</span></div>
+                </div>
+              `);
 
-    // Clean up the tooltip when component unmounts
+            tooltip
+              .style("top", event.pageY - 10 + "px")
+              .style("left", event.pageX + 10 + "px");
+          })
+          .on("mousemove", function (event) {
+            tooltip
+              .style("top", event.pageY - 10 + "px")
+              .style("left", event.pageX + 10 + "px");
+          })
+          .on("mouseout", function () {
+            tooltip.style("visibility", "hidden");
+          });
+      }
+    });
+
+    // Start observing the container
+    if (containerRef.current) {
+      resizeObserver.observe(containerRef.current);
+    }
+
+    // Clean up
     return () => {
+      resizeObserver.disconnect();
       d3.select("body").selectAll(".tooltip").remove();
     };
   }, []);
 
   return (
-    <div className="bg-white shadow-lg rounded-xl">
+    <div className="w-full bg-white shadow-lg rounded-xl">
       <CardHeader className="flex flex-row items-center justify-between w-full p-6">
         <h2 className="mb-4 text-xl font-semibold">
           Risk Level vs Confidence Score
@@ -398,7 +417,7 @@ const RiskConfidenceScatter = () => {
         </div>
       </CardHeader>
       <div className="w-full" ref={containerRef}>
-        <div className="w-full overflow-auto">
+        <div className="w-full">
           <svg ref={ref} style={{ width: "100%", height: "400px" }}></svg>
         </div>
       </div>

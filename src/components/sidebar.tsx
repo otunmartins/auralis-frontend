@@ -81,6 +81,9 @@ export function Sidebar() {
       if (window.innerWidth <= 1024) {
         setCollapsed(true);
       }
+      if (window.innerWidth >= 1024) {
+        setCollapsed(false);
+      }
     };
 
     // Initial check

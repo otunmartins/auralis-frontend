@@ -23,13 +23,15 @@ export default function InsightsAndVisualizationPage() {
           </Button>
         </div>
       </div>
+      {/* charts section start */}
       <div className="flex flex-col gap-4">
         <MolecularFeatureHeatmap />
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
           <RiskConfidenceScatter />
           <ConfidenceScoreTrend />
         </div>
       </div>
+      {/* charts section end */}
     </div>
   );
 }
