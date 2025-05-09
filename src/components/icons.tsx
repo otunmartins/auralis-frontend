@@ -636,3 +636,27 @@ export const BackChevronIcon = ({
     ></path>
   </svg>
 );
+
+export const CalendarIcon = ({
+  size = 18,
+  className = "",
+  ...props
+}: SvgIconProps) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    fill="none"
+    viewBox="0 0 18 18"
+    className={className}
+    {...props}
+  >
+    <path
+      stroke="#515D6F"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="1.5"
+      d="M13.5 1.5V3m-9-1.5V3m4.497 6.75h.006m-.006 3h.006m2.99-3H12m-6 0h.007m-.007 3h.007M2.625 6h12.75M2.25 6h13.5M1.875 9.182c0-3.268 0-4.902.94-5.917.938-1.015 2.45-1.015 5.473-1.015h1.425c3.022 0 4.534 0 5.473 1.015s.939 2.65.939 5.917v.386c0 3.268 0 4.902-.94 5.917-.938 1.015-2.45 1.015-5.472 1.015H8.288c-3.023 0-4.535 0-5.474-1.015s-.939-2.65-.939-5.917z"
+    ></path>
+  </svg>
+);

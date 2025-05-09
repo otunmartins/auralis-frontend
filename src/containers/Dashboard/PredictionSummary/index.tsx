@@ -3,6 +3,11 @@ import { BarChart } from "@/components/barChart";
 import { PieChart } from "@/components/pieChart";
 import RiskLevelDonutChart from "@/components/pieChartTest";
 import ConfidenceScoreBarChart from "@/components/confidenceScoreBarChart";
+const donutData = [
+  { label: "Medium Risk", value: 280, color: "#002B5B" },
+  { label: "Low Risk", value: 40, color: "#FFA725" },
+  { label: "High Risk", value: 30, color: "#E62E2E" },
+];
 
 export default function PredictionSummaryPage() {
   return (
@@ -28,7 +33,7 @@ export default function PredictionSummaryPage() {
         </div>
         <div className="col-span-1">
           {/* <PieChart /> */}
-          <RiskLevelDonutChart />
+          <RiskLevelDonutChart data={donutData} />
         </div>
       </div>
     </>

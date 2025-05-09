@@ -14,32 +14,31 @@ import { CheckFilledIcon } from "@/components/icons";
 import { XFilledIcon } from "@/components/icons";
 import { ActionEyeIcon, ActionDownloadIcon } from "@/components/icons";
 import { useRouter } from "next/navigation";
-import {
-  PredictionTableData,
-  predictionData,
-} from "@/siteData/predictionTableData";
-
+import { LogingTableData, logingTableData } from "@/siteData/loggingTableData";
+import type { DateRange } from "react-day-picker";
 const ITEMS_PER_PAGE = 5;
 
-interface PredictionTableProps {
+interface LogingTableProps {
   searchQuery?: string;
   riskLevel?: string;
-  moleculeType?: string;
+  systemLogType?: string;
+  dateRange?: DateRange;
 }
 
-export const PredictionTable: React.FC<PredictionTableProps> = ({
+export const LogingTable: React.FC<LogingTableProps> = ({
   searchQuery = "",
   riskLevel = "",
-  moleculeType = "",
+  systemLogType = "",
+  dateRange,
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [filteredData, setFilteredData] =
-    useState<PredictionTableData[]>(predictionData);
+    useState<LogingTableData[]>(logingTableData);
   const router = useRouter();
 
   // Filter data when search query or filters change
   useEffect(() => {
-    let filtered = [...predictionData];
+    let filtered = [...logingTableData];
 
     // Filter by search query
     if (searchQuery) {
@@ -60,22 +59,24 @@ export const PredictionTable: React.FC<PredictionTableProps> = ({
       );
     }
 
-    // Filter by molecule type (assuming this would be a property in the future)
-    if (moleculeType && moleculeType !== "all") {
-      // This is a placeholder for molecule type filtering
-      // In a real implementation, you would filter based on molecule type property
-      // For now, let's assume every molecule with an even ID is of the selected type
-      const isEvenId = (id: string) => {
-        const numPart = parseInt(id.replace(/\D/g, ""));
-        return numPart % 2 === 0;
-      };
+    // Filter by system log type
+    if (systemLogType && systemLogType !== "all") {
+      filtered = filtered.filter((item) => item.eventType === systemLogType);
+    }
 
-      filtered = filtered.filter((item) => isEvenId(item.id));
+    // Filter by date range
+    if (dateRange?.from && dateRange?.to) {
+      const fromDate = new Date(dateRange.from);
+      const toDate = new Date(dateRange.to);
+      filtered = filtered.filter((item) => {
+        const logDate = new Date(item.timestamp);
+        return logDate >= fromDate && logDate <= toDate;
+      });
     }
 
     setFilteredData(filtered);
     setCurrentPage(1); // Reset to first page when filters change
-  }, [searchQuery, riskLevel, moleculeType]);
+  }, [searchQuery, riskLevel, systemLogType, dateRange]);
 
   // Calculate pagination
   const totalPages = Math.ceil(filteredData.length / ITEMS_PER_PAGE);
@@ -87,8 +88,8 @@ export const PredictionTable: React.FC<PredictionTableProps> = ({
     setCurrentPage(page);
   };
 
-  const handleRowClick = (moleculeId: string) => {
-    router.push(`/prediction/${moleculeId}`);
+  const handleRowClick = (systemLogId: string) => {
+    router.push(`/loging-detail/${systemLogId}`);
   };
 
   return (
@@ -98,19 +99,13 @@ export const PredictionTable: React.FC<PredictionTableProps> = ({
           <TableHeader className="sticky top-0 z-10">
             <TableRow className="bg-[#f8f8f8]">
               <TableHead className="font-text-2-semibold text-[#515d6f] whitespace-nowrap p-6 border-b border-[#e9e9eb]">
-                Molecule ID
+                Timestamp
               </TableHead>
               <TableHead className="font-text-2-semibold text-[#515d6f] whitespace-nowrap p-6 border-b border-[#e9e9eb]">
-                Structure
+                Event Type
               </TableHead>
               <TableHead className="font-text-2-semibold text-[#515d6f] whitespace-nowrap p-6 border-b border-[#e9e9eb]">
-                Confidence Score
-              </TableHead>
-              <TableHead className="font-text-2-semibold text-[#515d6f] whitespace-nowrap p-6 border-b border-[#e9e9eb]">
-                AI Model Used
-              </TableHead>
-              <TableHead className="font-text-2-semibold text-[#515d6f] whitespace-nowrap p-6 border-b border-[#e9e9eb]">
-                Drug Candidate
+                Description
               </TableHead>
               <TableHead className="font-text-2-semibold text-[#515d6f] whitespace-nowrap p-6 border-b border-[#e9e9eb]">
                 Risk Level
@@ -131,79 +126,53 @@ export const PredictionTable: React.FC<PredictionTableProps> = ({
                 </TableCell>
               </TableRow>
             ) : (
-              currentData.map((molecule, index) => (
+              currentData.map((systemLog, index) => (
                 <TableRow
-                  key={molecule.id}
+                  key={systemLog.id}
                   className={`${
                     index % 2 === 0 ? "bg-white" : "bg-neutral-50"
                   } cursor-pointer hover:bg-neutral-100`}
-                  onClick={() => handleRowClick(molecule.id)}
+                  onClick={() => handleRowClick(systemLog.id)}
                 >
                   <TableCell className="font-text-sm-regular text-[#535861] whitespace-nowrap px-6 py-[26] border-b border-[#e9e9eb]">
-                    {molecule.id}
+                    {systemLog.timestamp}
                   </TableCell>
                   <TableCell className="font-text-2-medium text-[#414651] whitespace-nowrap px-6 py-[26px] border-b border-[#e9e9eb]">
-                    {molecule.structure}
+                    {systemLog.eventType}
                   </TableCell>
                   <TableCell className="font-text-2-medium text-[#414651] whitespace-nowrap px-6 py-[26px] border-b border-[#e9e9eb]">
-                    {molecule.confidenceScore}
+                    {systemLog.description}
                   </TableCell>
-                  <TableCell className="font-text-2-medium text-[#414651] whitespace-nowrap px-6 py-[26px] border-b border-[#e9e9eb]">
-                    {molecule.aiModel}
-                  </TableCell>
-                  <TableCell className="px-6 py-[26px] border-b border-[#e9e9eb]">
-                    <div className="flex items-center gap-3">
-                      {molecule.drugCandidate.isCandidate ? (
-                        <>
-                          <CheckFilledIcon />
 
-                          <span className="font-text-2-medium text-[#414651] whitespace-nowrap">
-                            {molecule.drugCandidate.value}
-                          </span>
-                        </>
-                      ) : molecule.id === "107" || molecule.id === "108" ? (
-                        <span className="font-text-2-medium text-[#414651] whitespace-nowrap">
-                          {molecule.drugCandidate.value}
-                        </span>
-                      ) : (
-                        <>
-                          <XFilledIcon />
-                          <span className="font-text-2-medium text-[#414651] whitespace-nowrap">
-                            {molecule.drugCandidate.value}
-                          </span>
-                        </>
-                      )}
-                    </div>
-                  </TableCell>
                   <TableCell className="px-6 py-[26px] border-b border-[#e9e9eb]">
                     <Badge
                       className={`flex items-center gap-1 w-fit border-none  pl-1.5 pr-2 py-0.5 rounded-2xl  ${
-                        molecule.riskLevel.level === "High"
+                        systemLog.riskLevel.level === "High"
                           ? "!bg-error-50 !text-error-500"
-                          : molecule.riskLevel.level === "Medium"
+                          : systemLog.riskLevel.level === "Medium"
                           ? "!bg-success-50 !text-success-500"
-                          : molecule.riskLevel.level === "Low"
+                          : systemLog.riskLevel.level === "Low"
                           ? "!bg-warning-50 !text-warning-500"
-                          : molecule.riskLevel.level === "Expert"
+                          : systemLog.riskLevel.level === "Expert"
                           ? "!bg-informationinfo-50 !text-informationinfo-500"
                           : "!bg-neutralneutral-50 !text-neutralneutral-600"
                       }`}
                     >
-                      {(molecule.riskLevel.level === "High" ||
-                        molecule.riskLevel.level === "Medium" ||
-                        molecule.riskLevel.level === "Low") && (
+                      {(systemLog.riskLevel.level === "High" ||
+                        systemLog.riskLevel.level === "Medium" ||
+                        systemLog.riskLevel.level === "Low") && (
                         <div className="flex items-center gap-1">
                           <div
                             className={`relative w-1.5 h-1.5 top-px left-px rounded-[3px] ${
-                              molecule.riskLevel.level === "High"
+                              systemLog.riskLevel.level === "High"
                                 ? "!bg-error-500"
-                                : molecule.riskLevel.level === "Medium"
+                                : systemLog.riskLevel.level === "Medium"
                                 ? "!bg-success-500"
                                 : "!bg-warning-500"
                             }`}
                           />
                           <span className="font-text-2-medium whitespace-nowrap">
-                            {molecule.riskLevel.level}
+                            {systemLog.riskLevel.level}
                           </span>
                         </div>
                       )}
@@ -212,7 +181,6 @@ export const PredictionTable: React.FC<PredictionTableProps> = ({
                   <TableCell className="px-6 py-[26px] border-b border-[#e9e9eb]">
                     <div className="flex items-center gap-3">
                       <ActionEyeIcon />
-                      <ActionDownloadIcon />
                     </div>
                   </TableCell>
                 </TableRow>

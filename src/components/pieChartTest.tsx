@@ -11,17 +11,17 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 
-const donutData = [
-  { label: "Medium Risk", value: 280, color: "#002B5B" },
-  { label: "Low Risk", value: 40, color: "#FFA725" },
-  { label: "High Risk", value: 30, color: "#E62E2E" },
-];
-
-export default function RiskLevelDonutChart() {
+export default function RiskLevelDonutChart({
+  data,
+  isFilter = true,
+}: {
+  data: { label: string; value: number; color: string }[];
+  isFilter?: boolean;
+}) {
   const [timeRange, setTimeRange] = useState("This Week");
   const svgRef = useRef<SVGSVGElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const total = donutData.reduce((acc, item) => acc + item.value, 0);
+  const total = data.reduce((acc, item) => acc + item.value, 0);
 
   useEffect(() => {
     function drawChart() {
@@ -32,7 +32,7 @@ export default function RiskLevelDonutChart() {
       const size = Math.max(180, Math.min(containerWidth, 400)); // Responsive size, min 180, max 400
       const width = size;
       const height = size;
-      const radius = Math.min(width, height) / 2 - size * 0.05;
+      const radius = Math.min(width, height) / 2 - size * 0.09;
 
       const arc = d3
         .arc<any>()
@@ -57,7 +57,7 @@ export default function RiskLevelDonutChart() {
       // Draw donut segments
       const arcs = svg
         .selectAll(".arc")
-        .data(pie(donutData))
+        .data(pie(data))
         .enter()
         .append("g")
         .attr("class", "arc");
@@ -144,37 +144,43 @@ export default function RiskLevelDonutChart() {
     >
       {/* Header */}
       <div className="flex flex-col gap-1 mb-4">
-        <h2 className="text-lg font-semibold text-gray-800">
+        <h2
+          className={`text-lg font-semibold text-gray-800 ${
+            !isFilter ? "text-center" : "text-left"
+          }`}
+        >
           Risk Level Distribution
         </h2>
-        <Select value={timeRange} onValueChange={setTimeRange}>
-          <SelectTrigger className="h-8 gap-2 px-2 py-1 text-sm bg-white border border-gray-200 rounded-full w-fit focus:outline-none !text-grey-dark">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent className="bg-white !text-grey-dark">
-            <SelectItem value="This Week">This Week</SelectItem>
-            <SelectItem value="Last Week">Last Week</SelectItem>
-            <SelectItem value="This Month">This Month</SelectItem>
-          </SelectContent>
-        </Select>
+        {isFilter && (
+          <Select value={timeRange} onValueChange={setTimeRange}>
+            <SelectTrigger className="h-8 gap-2 px-2 py-1 text-sm bg-white border border-gray-200 rounded-full w-fit focus:outline-none !text-grey-dark">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className="bg-white !text-grey-dark">
+              <SelectItem value="This Week">This Week</SelectItem>
+              <SelectItem value="Last Week">Last Week</SelectItem>
+              <SelectItem value="This Month">This Month</SelectItem>
+            </SelectContent>
+          </Select>
+        )}
       </div>
 
       {/* Chart */}
-      <div className="flex items-center justify-center w-full h-full min-h-[180px]">
+      <div className="flex items-center justify-center w-full h-full min-h-[180px] min-w-[300px]">
         <svg ref={svgRef} className="block w-full h-full" />
       </div>
 
       {/* Legend */}
       <div className="flex flex-col items-center self-stretch justify-center w-full gap-2">
         <div className="flex flex-col items-start gap-2">
-          {donutData.map((risk, index) => (
+          {data.map((risk, index) => (
             <div key={index} className="flex items-center gap-3">
               <div
                 className="relative max-xl:w-[30px] max-lg:w-[12px] max-md:w-[47px] w-[47px] h-2 rounded-2xl"
                 style={{ backgroundColor: risk.color }}
               />
               <div className="font-regular text-grey-700 text-paragraph-small whitespace-nowrap">
-                {risk.label} - ({((risk.value / 350) * 100).toFixed(1)}%)
+                {risk.label} - ({((risk.value / total) * 100).toFixed(1)}%)
               </div>
             </div>
           ))}

@@ -11,13 +11,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useState } from "react";
-import { PredictionTable } from "./PredictionTable";
+import { LogingTable } from "./LogingTable";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { DateRangeSelector } from "@/components/ui/date-range-selector";
+import type { DateRange } from "react-day-picker";
 
-export default function PredictionsPage() {
+export default function LogingSystemPage() {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [riskLevel, setRiskLevel] = useState<string>("");
-  const [moleculeType, setMoleculeType] = useState<string>("");
+  const [systemLogType, setSystemLogType] = useState<string>("");
+  const [dateRange, setDateRange] = useState<DateRange | undefined>({
+    from: new Date(2019, 3, 12), // April 12, 2025
+    to: new Date(2025, 5, 12), // June 12, 2025
+  });
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -27,14 +33,15 @@ export default function PredictionsPage() {
     setRiskLevel(value === "all" ? "" : value);
   };
 
-  const handleMoleculeTypeChange = (value: string) => {
-    setMoleculeType(value === "all" ? "" : value);
+  const handleSystemLogTypeChange = (value: string) => {
+    setSystemLogType(value === "all" ? "" : value);
   };
 
   const handleClearFilters = () => {
     setSearchQuery("");
     setRiskLevel("");
-    setMoleculeType("");
+    setSystemLogType("");
+    setDateRange(undefined);
   };
 
   return (
@@ -43,12 +50,15 @@ export default function PredictionsPage() {
 
       <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center ">
         <div className="w-full">
-          <SearchInput
-            onSearch={handleSearch}
-            placeholder="Search molecules..."
+          <SearchInput onSearch={handleSearch} placeholder="Search logs..." />
+        </div>
+        <div className="w-full max-w-[285px]">
+          <DateRangeSelector
+            initialDateRange={dateRange}
+            onChange={setDateRange}
+            className="w-full"
           />
         </div>
-
         <div className="flex items-center gap-2">
           <Select value={riskLevel} onValueChange={handleRiskLevelChange}>
             <SelectTrigger className="min-w-[124px] h-[41.6px]">
@@ -62,16 +72,19 @@ export default function PredictionsPage() {
             </SelectContent>
           </Select>
 
-          <Select value={moleculeType} onValueChange={handleMoleculeTypeChange}>
+          <Select
+            value={systemLogType}
+            onValueChange={handleSystemLogTypeChange}
+          >
             <SelectTrigger className="min-w-[159px] h-[41.6px]">
-              <SelectValue placeholder="Molecule type" />
+              <SelectValue placeholder="Event type" />
             </SelectTrigger>
             <SelectContent className="bg-white">
               <SelectItem value="all">All</SelectItem>
-              <SelectItem value="protein">Protein</SelectItem>
-              <SelectItem value="dna">DNA</SelectItem>
-              <SelectItem value="rna">RNA</SelectItem>
-              <SelectItem value="smallMolecule">Small Molecule</SelectItem>
+              <SelectItem value="File Upload">File Upload</SelectItem>
+              <SelectItem value="Login">Login</SelectItem>
+              <SelectItem value="Model Run">Model Run</SelectItem>
+              <SelectItem value="Api Request">Api Request</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -80,16 +93,17 @@ export default function PredictionsPage() {
         <CardHeader className="flex overflow-hidden bg-white rounded-t-xl items-center w-full p-0 border-b border-[#eeeeee]">
           <div className="w-full p-6 ">
             <CardTitle className="[font-family:'Plus_Jakarta_Sans',Helvetica] font-semibold text-[#414651] text-lg leading-6">
-              Predictions
+              System Logs & Activity Tracker
             </CardTitle>
           </div>
         </CardHeader>
 
         <CardContent className="w-full p-0">
-          <PredictionTable
+          <LogingTable
             searchQuery={searchQuery}
             riskLevel={riskLevel}
-            moleculeType={moleculeType}
+            systemLogType={systemLogType}
+            dateRange={dateRange}
           />
         </CardContent>
       </Card>

@@ -55,7 +55,7 @@ const menuItems = [
   },
   {
     title: "Logging System",
-    href: "/logs",
+    href: "/loging-system",
     icon: LoggingIcon,
   },
   {
