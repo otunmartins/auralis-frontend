@@ -13,6 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { SearchInput } from "./searchInput";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,13 +21,8 @@ export default function Header() {
   return (
     <header className="w-full ">
       <div className="w-full rounded-[18px] bg-white flex items-center justify-between py-4 px-[18px] mx-auto">
-        <div className="relative flex items-center w-full max-w-md ">
-          <Search className="absolute w-4 h-4 left-3 text-muted-foreground" />
-          <Input
-            type="search"
-            placeholder="Search by..."
-            className="pl-10 border-input focus:ring-0 focus:border-ring"
-          />
+        <div className="w-full max-w-[381px]">
+          <SearchInput />
         </div>
 
         <div className="flex items-center gap-4">

@@ -55,7 +55,7 @@ const menuItems = [
   },
   {
     title: "Logging System",
-    href: "/logs",
+    href: "/loging-system",
     icon: LoggingIcon,
   },
   {
@@ -80,6 +80,9 @@ export function Sidebar() {
       setIsLargeScreen(window.innerWidth <= 1024);
       if (window.innerWidth <= 1024) {
         setCollapsed(true);
+      }
+      if (window.innerWidth >= 1024) {
+        setCollapsed(false);
       }
     };
 

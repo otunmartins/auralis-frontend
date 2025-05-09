@@ -174,15 +174,6 @@ export function PieChart() {
       </div>
 
       {/* Chart */}
-      <div className="relative">
-        <HighchartsReact highcharts={Highcharts} options={options} />
-        <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <div className="flex min-w-[113px] max-w-[113px] min-h-[113px] max-h-[113px] flex-col items-center justify-center bg-white rounded-full shadow-lg">
-            <div className="text-2xl font-bold text-gray-800">{total}</div>
-            <div className="text-sm text-gray-500">Total</div>
-          </div>
-        </div>
-      </div>
 
       {/* Legend */}
       {/* <div className="mt-6 space-y-2">

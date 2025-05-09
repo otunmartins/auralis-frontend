@@ -266,7 +266,7 @@ export const SupportIcon = ({
 );
 
 export const DownloadIcon = ({
-  size = 18,
+  size = 20,
   className = "",
   ...props
 }: SvgIconProps) => (
@@ -275,16 +275,16 @@ export const DownloadIcon = ({
     width={size}
     height={size}
     fill="none"
-    viewBox="0 0 18 14"
+    viewBox="0 0 20 20"
     className={className}
     {...props}
   >
     <path
-      stroke="#6D727A"
+      stroke="#9C9FAD"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="1.5"
-      d="M13.108 5.758h.017A3.38 3.38 0 0 1 16.5 9.14a3.38 3.38 0 0 1-3 3.361m-.392-6.742q.017-.185.017-.375A4.13 4.13 0 0 0 9 1.25a4.13 4.13 0 0 0-4.11 3.774m8.218.734a4.1 4.1 0 0 1-.926 2.254M4.89 5.024a3.755 3.755 0 0 0-3.39 3.74 3.76 3.76 0 0 0 3 3.682m.39-7.422q.179-.017.36-.017c.844 0 1.624.28 2.25.751"
+      d="M14.565 7.51h.018a3.753 3.753 0 0 1 3.75 3.756A3.755 3.755 0 0 1 15 15m-.435-7.49q.018-.207.018-.418A4.59 4.59 0 0 0 10 2.5a4.587 4.587 0 0 0-4.566 4.193m9.13.816a4.58 4.58 0 0 1-1.028 2.505m-8.102-3.32a4.17 4.17 0 0 0-3.767 4.155A4.174 4.174 0 0 0 5 14.939m.434-8.246a4.143 4.143 0 0 1 2.9.816M10 17.5v-6.667m0 6.667c-.583 0-1.674-1.662-2.083-2.084M10 17.5c.584 0 1.674-1.662 2.083-2.084"
     ></path>
   </svg>
 );
@@ -504,5 +504,159 @@ export const UploadIcon = ({
         <rect width="64" height="64" y="0.5" fill="#fff" rx="32"></rect>
       </clipPath>
     </defs>
+  </svg>
+);
+
+export const SearchIcon = ({
+  size = 18,
+  className = "",
+  ...props
+}: SvgIconProps) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    fill="none"
+    viewBox="0 0 18 18"
+  >
+    <g
+      fill="#888"
+      fillRule="evenodd"
+      clipPath="url(#clip0_62723_810)"
+      clipRule="evenodd"
+    >
+      <path d="M12.595 12.595a.75.75 0 0 1 1.06 0l3.375 3.375a.75.75 0 1 1-1.06 1.06l-3.375-3.375a.75.75 0 0 1 0-1.06"></path>
+      <path d="M.75 8.25a7.5 7.5 0 1 1 15 0 7.5 7.5 0 0 1-15 0m7.5-6a6 6 0 1 0 0 12 6 6 0 0 0 0-12"></path>
+    </g>
+    <defs>
+      <clipPath id="clip0_62723_810">
+        <path fill="#fff" d="M0 0h18v18H0z"></path>
+      </clipPath>
+    </defs>
+  </svg>
+);
+
+export const ActionEyeIcon = ({
+  size = 36,
+  className = "",
+  ...props
+}: SvgIconProps) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    fill="none"
+    viewBox="0 0 36 32"
+    className={className}
+    {...props}
+  >
+    <path
+      fill="#E6F6FD"
+      d="M.833 6a6 6 0 0 1 6-6h23a6 6 0 0 1 6 6v20a6 6 0 0 1-6 6h-23a6 6 0 0 1-6-6z"
+    ></path>
+    <g stroke="#00AFFF" strokeWidth="1.5" clipPath="url(#clip0_62273_3917)">
+      <path d="M19.917 16c0-1.105-1.008-2-2.25-2-1.243 0-2.25.895-2.25 2s1.007 2 2.25 2c1.242 0 2.25-.895 2.25-2Z"></path>
+      <path
+        strokeLinejoin="round"
+        d="M18.083 11c3.59 0 6.664 2.675 7.945 3.975.407.412.407.97 0 1.383-1.281 1.3-4.356 3.975-7.945 3.975s-6.663-2.675-7.944-3.974c-.408-.413-.407-.972 0-1.384C11.42 13.675 14.494 11 18.083 11Z"
+      ></path>
+    </g>
+    <defs>
+      <clipPath id="clip0_62273_3917">
+        <path fill="#fff" d="M8.833 8h19v16h-19z"></path>
+      </clipPath>
+    </defs>
+  </svg>
+);
+
+export const ActionDownloadIcon = ({
+  size = 33,
+  className = "",
+  ...props
+}: SvgIconProps) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    fill="none"
+    viewBox="0 0 33 32"
+    className={className}
+    {...props}
+  >
+    <path
+      fill="#E9F7EE"
+      d="M.833 6a6 6 0 0 1 6-6h20a6 6 0 0 1 6 6v20a6 6 0 0 1-6 6h-20a6 6 0 0 1-6-6z"
+    ></path>
+    <g
+      stroke="#1FB356"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="1.5"
+      clipPath="url(#clip0_62273_3912)"
+    >
+      <path d="M20.485 14.007h.015c1.657 0 3 1.346 3 3.006A3.004 3.004 0 0 1 20.833 20m-.348-5.993q.015-.165.015-.334A3.67 3.67 0 0 0 16.833 10a3.67 3.67 0 0 0-3.653 3.355m7.305.652a3.66 3.66 0 0 1-.823 2.004m-6.482-2.656a3.34 3.34 0 0 0-3.013 3.324 3.34 3.34 0 0 0 2.666 3.273m.347-6.597a3.315 3.315 0 0 1 2.32.653M16.833 22v-5.333m0 5.333c-.466 0-1.339-1.33-1.666-1.666M16.833 22c.467 0 1.34-1.33 1.667-1.666"></path>
+    </g>
+    <defs>
+      <clipPath id="clip0_62273_3912">
+        <path fill="#fff" d="M8.833 8h16v16h-16z"></path>
+      </clipPath>
+    </defs>
+  </svg>
+);
+
+export const BackChevronIcon = ({
+  size = 32,
+  className = "",
+  ...props
+}: SvgIconProps) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    fill="none"
+    viewBox="0 0 32 32"
+    className={className}
+    {...props}
+  >
+    <rect width="31" height="31" x="0.5" y="0.5" fill="#fff" rx="5.5"></rect>
+    <rect
+      width="31"
+      height="31"
+      x="0.5"
+      y="0.5"
+      stroke="#E3E3E3"
+      rx="5.5"
+    ></rect>
+    <path
+      stroke="#717680"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="1.5"
+      d="M19.333 9.5s-6.666 4.419-6.666 6 6.666 6 6.666 6"
+    ></path>
+  </svg>
+);
+
+export const CalendarIcon = ({
+  size = 18,
+  className = "",
+  ...props
+}: SvgIconProps) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    fill="none"
+    viewBox="0 0 18 18"
+    className={className}
+    {...props}
+  >
+    <path
+      stroke="#515D6F"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="1.5"
+      d="M13.5 1.5V3m-9-1.5V3m4.497 6.75h.006m-.006 3h.006m2.99-3H12m-6 0h.007m-.007 3h.007M2.625 6h12.75M2.25 6h13.5M1.875 9.182c0-3.268 0-4.902.94-5.917.938-1.015 2.45-1.015 5.473-1.015h1.425c3.022 0 4.534 0 5.473 1.015s.939 2.65.939 5.917v.386c0 3.268 0 4.902-.94 5.917-.938 1.015-2.45 1.015-5.472 1.015H8.288c-3.023 0-4.535 0-5.474-1.015s-.939-2.65-.939-5.917z"
+    ></path>
   </svg>
 );
