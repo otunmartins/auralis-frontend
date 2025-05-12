@@ -73,7 +73,7 @@ export default function CustomFAQSection() {
         <h2 className="mb-12 text-3xl font-bold text-center">
           Frequently Asked Questions
         </h2>
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-x-6 md:grid-cols-2">
           <div>
             {leftColumnItems.map((item) => (
               <div key={item.id} className="mb-4 border rounded-md">
