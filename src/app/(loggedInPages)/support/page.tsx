@@ -1,5 +1,9 @@
 import FeedbackAndSupportPage from "@/containers/FeedbackAndSupport";
-
+import { Suspense } from "react";
 export default function SupportPage() {
-  return <FeedbackAndSupportPage />;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <FeedbackAndSupportPage />
+    </Suspense>
+  );
 }
