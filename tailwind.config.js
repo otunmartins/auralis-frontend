@@ -146,6 +146,7 @@ module.exports = {
           light: "#eeeeee",
           mediumDark: "#6D727A",
           dark: "#333333",
+          darker: "#414651",
         },
       },
     },

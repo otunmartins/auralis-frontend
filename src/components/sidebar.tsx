@@ -134,7 +134,12 @@ export function Sidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 pt-4 overflow-y-auto scrollbar-hide">
-        <ul className={cn("space-y-1", collapsed ? "px-0" : "px-4")}>
+        <ul
+          className={cn(
+            "space-y-1 h-full flex flex-col justify-between pb-6",
+            collapsed ? "px-0" : "px-4"
+          )}
+        >
           <div className="space-y-1">
             {menuItems.map((item) => {
               const isActive = pathname === item.href;
@@ -166,15 +171,23 @@ export function Sidebar() {
           </div>
           <div>
             <Link
-              href={"item.href"}
+              href={"/support"}
               className={cn(
-                "flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors",
-                collapsed && "justify-center"
+                "flex items-center rounded-lg px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors",
+                pathname === "/support" && "bg-[#EDF8FF] text-primary-800 ",
+                collapsed && "justify-center rounded-none"
               )}
             >
-              <SupportIcon />
+              <SupportIcon
+                className={cn(
+                  "h-5 w-5 flex-shrink-0",
+                  pathname === "/support" && "text-blue-600"
+                )}
+              />
               {!collapsed && (
-                <span className="ml-3 text-sm font-medium">Support</span>
+                <span className="ml-3 text-sm font-medium">
+                  Feedbacks & Support
+                </span>
               )}
             </Link>
           </div>
