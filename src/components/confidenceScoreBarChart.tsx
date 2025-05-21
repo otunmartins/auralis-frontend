@@ -24,6 +24,11 @@ const ConfidenceScoreBarChart = () => {
     { range: "80%–89%", count: 80 },
     { range: "90%–100%", count: 70 },
   ];
+  const dataForMobile = [
+    { range: "30%–60%", count: 720 },
+    { range: "60%–90%", count: 440 },
+    { range: "90%–100%", count: 320 },
+  ];
 
   useEffect(() => {
     function drawChart() {
@@ -37,15 +42,18 @@ const ConfidenceScoreBarChart = () => {
       const width = containerWidth;
       const height = containerHeight;
 
+      // Use mobile data for screens below 768px
+      const chartData = containerWidth < 600 ? dataForMobile : data;
+
       const x = d3
         .scaleBand()
-        .domain(data.map((d) => d.range))
+        .domain(chartData.map((d) => d.range))
         .range([0, width - margin.left - margin.right])
         .padding(0.2);
 
       const y = d3
         .scaleLinear()
-        .domain([0, d3.max(data, (d) => d.count)!])
+        .domain([0, d3.max(chartData, (d) => d.count)!])
         .nice()
         .range([height - margin.top - margin.bottom, 0]);
 
@@ -66,7 +74,7 @@ const ConfidenceScoreBarChart = () => {
         .call((g) => g.select(".domain").remove())
         .call((g) => g.selectAll("line").remove())
         .selectAll("text")
-        .style("font-size", "12px");
+        .style("font-size", containerWidth < 768 ? "10px" : "12px");
 
       // Y Axis
       g.append("g")
@@ -78,7 +86,7 @@ const ConfidenceScoreBarChart = () => {
 
       // Bars with rounded top corners
       g.selectAll()
-        .data(data)
+        .data(chartData)
         .enter()
         .append("rect")
         .attr("x", (d) => x(d.range)!)
@@ -103,7 +111,7 @@ const ConfidenceScoreBarChart = () => {
     <div className="flex flex-col justify-between w-full h-full p-4 bg-white rounded-lg shadow-lg">
       {/* Header */}
       <div>
-        <div className="flex items-center justify-between">
+        <div className="flex flex-wrap items-center justify-between gap-2">
           <h2 className="text-lg font-semibold text-gray-800">
             Confidence Score Distribution
           </h2>

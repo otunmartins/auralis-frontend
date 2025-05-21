@@ -36,9 +36,15 @@ const ConfidenceAreaChart = () => {
 
       const containerWidth = containerRef.current.clientWidth;
       const containerHeight = containerRef.current.clientHeight;
-      const margin = { top: 30, right: 30, bottom: 50, left: 50 };
       const width = containerWidth;
       const height = containerHeight;
+      const isMobile = width < 600; // Check if mobile view
+      const margin = {
+        top: 30,
+        right: isMobile ? 0 : 30,
+        bottom: 50,
+        left: isMobile ? 40 : 50,
+      };
 
       const x = d3
         .scalePoint()
@@ -146,7 +152,7 @@ const ConfidenceAreaChart = () => {
         .call((g) => g.select(".domain").remove())
         .call((g) => g.selectAll("line").remove())
         .selectAll("text")
-        .style("font-size", "12px");
+        .style("font-size", isMobile ? "10px" : "12px");
 
       // X axis
       g.append("g")
@@ -157,7 +163,56 @@ const ConfidenceAreaChart = () => {
         .call(d3.axisBottom(x))
         .call((g) => g.select(".domain").remove())
         .selectAll("text")
-        .style("font-size", "12px");
+        .style("font-size", "12px")
+        .text(function (d) {
+          const value = d as string;
+          if (isMobile) {
+            return "";
+          }
+          return value;
+        });
+
+      // Add range indicators below the chart
+      if (isMobile) {
+        const rangeGroups = [];
+        for (let i = 0; i < data.length; i += 5) {
+          const start = i + 1;
+          const end = Math.min(i + 5, data.length);
+          rangeGroups.push({ start, end });
+        }
+
+        const rangeIndicator = svg
+          .append("g")
+          .attr("transform", `translate(${margin.left}, ${height - 40})`);
+
+        rangeGroups.forEach((range, i) => {
+          const startX = x(data[i * 5].model)!;
+          const endX = x(
+            data[Math.min((i + 1) * 5 - 1, data.length - 1)].model
+          )!;
+          const width = endX - startX;
+          const centerX = startX + width / 2;
+
+          // Add the range bar
+          rangeIndicator
+            .append("rect")
+            .attr("x", startX)
+            .attr("y", 0)
+            .attr("width", width)
+            .attr("height", 1)
+            .attr("fill", "black");
+
+          // Add centered range label
+          rangeIndicator
+            .append("text")
+            .attr("x", centerX)
+            .attr("y", 15)
+            .attr("text-anchor", "middle")
+            .attr("font-size", "10px")
+            .attr("fill", "black")
+            .text(`ML: ${range.start}-${range.end}`);
+        });
+      }
     }
 
     drawChart();
@@ -170,9 +225,9 @@ const ConfidenceAreaChart = () => {
   }, []);
 
   return (
-    <div className="p-6 bg-white shadow-lg rounded-xl">
+    <div className="p-6 bg-white shadow-lg max-md:p-4 rounded-xl">
       <CardHeader className="flex flex-row items-center justify-between w-full p-0">
-        <CardTitle className="  font-strong text-heading-xxsmall text-[#333333] ">
+        <CardTitle className="font-strong text-heading-xxsmall text-[#333333]">
           Confidence Score Trend
         </CardTitle>
 
@@ -204,11 +259,11 @@ const ConfidenceAreaChart = () => {
       </CardHeader>
       <div
         ref={containerRef}
-        className="w-full h-full min-h-[340px] max-h-[340px] min-w-[200px] "
+        className="w-full h-full min-h-[340px] max-h-[340px] min-w-[200px]"
       >
         <svg ref={ref} className="w-full h-full" />
       </div>
-      <div className="flex items-center justify-center w-full gap-4 mt-4 text-sm">
+      <div className="flex flex-wrap items-center justify-center w-full gap-4 mt-4 text-sm">
         <div className="flex items-center gap-2 text-label-xsmall">
           <div className="w-[9px] h-[9px] bg-yellow-400 rounded-full" /> Low
           Risk

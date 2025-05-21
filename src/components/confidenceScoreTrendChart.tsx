@@ -48,7 +48,7 @@ const ConfidenceScoreTrend = () => {
         const margin = { top: 30, right: 30, bottom: 50, left: 50 };
         const width = containerWidth - margin.left - margin.right;
         const height = 400;
-
+        const axisFontSize = Math.min(13, containerWidth * 0.015);
         const x = d3.scalePoint().domain(models).range([0, width]).padding(0.5);
         const y = d3
           .scaleLinear()
@@ -109,7 +109,7 @@ const ConfidenceScoreTrend = () => {
               .tickFormat((d) => `${d}%`)
           )
           .selectAll("text")
-          .style("font-size", "12px");
+          .style("font-size", `${axisFontSize}px`);
 
         // X Axis
         g.append("g")
@@ -119,7 +119,7 @@ const ConfidenceScoreTrend = () => {
           )
           .call(d3.axisBottom(x))
           .selectAll("text")
-          .style("font-size", "12px");
+          .style("font-size", `${axisFontSize}px`);
 
         // Line Path
         g.append("path")
@@ -232,7 +232,7 @@ const ConfidenceScoreTrend = () => {
           <svg ref={ref} style={{ width: "100%", height: "400px" }}></svg>
         </div>
       </div>
-      <div className="flex items-center justify-center w-full gap-4 p-6 pt-0 text-sm">
+      <div className="flex flex-wrap items-center justify-center w-full gap-4 p-6 pt-0 text-sm">
         <div className="flex items-center gap-2">
           <div
             className="w-4 h-4 rounded-full"
