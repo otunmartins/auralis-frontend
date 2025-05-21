@@ -21,18 +21,20 @@ export default function Header() {
   return (
     <header className="w-full ">
       <div className="w-full rounded-[18px] bg-white flex items-center justify-between py-4 px-[18px] mx-auto">
-        <div className="w-full max-w-[381px]">
+        <div className="w-full max-w-[381px] max-md:hidden mr-2">
           <SearchInput />
         </div>
 
-        <div className="flex items-center gap-4">
-          <ThemeToggle />
+        <div className="flex items-center w-full gap-4 max-md:justify-between">
+          <div className="flex items-center gap-4">
+            <ThemeToggle />
 
-          <div className="relative">
-            <Button variant="ghost" className="text-foreground">
-              <Bell className="w-5 h-5" />
-              <span className="absolute w-2 h-2 bg-red-500 rounded-full top-2 right-2"></span>
-            </Button>
+            <div className="relative">
+              <Button variant="ghost" className="text-foreground">
+                <Bell className="w-5 h-5" />
+                <span className="absolute w-2 h-2 bg-red-500 rounded-full top-2 right-2"></span>
+              </Button>
+            </div>
           </div>
 
           <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
@@ -42,7 +44,7 @@ export default function Header() {
                   <AvatarImage src="https://github.com/shadcn.png" alt="User" />
                   <AvatarFallback>AR</AvatarFallback>
                 </Avatar>
-                <div className="flex flex-col items-start text-sm">
+                <div className="flex flex-col items-start text-sm max-md:hidden">
                   <span className="font-medium">Asha Roya</span>
                   <span className="text-xs text-muted-foreground">
                     asha@gmail.com
