@@ -25,7 +25,7 @@ export default function Header() {
           <SearchInput />
         </div>
 
-        <div className="flex items-center w-full gap-4 max-md:justify-between">
+        <div className="flex items-center justify-end w-full gap-4 max-md:justify-between">
           <div className="flex items-center gap-4">
             <ThemeToggle />
 
