@@ -10,13 +10,10 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import PhoneInput from "react-phone-number-input";
-import "react-phone-number-input/style.css";
 
 interface SignUpFormData {
   fullName: string;
   email: string;
-  phoneNumber: string;
   password: string;
   confirmPassword: string;
   terms: boolean;
@@ -33,14 +30,7 @@ const signUpSchema = yup
       .string()
       .email("Invalid email address")
       .required("Email is required"),
-    phoneNumber: yup
-      .string()
-      .required("Phone number is required")
-      .test("valid-phone", "Please enter a valid phone number", (value) => {
-        if (!value) return false;
-        // Basic validation for E.164 format (e.g. +923001234567)
-        return /^\+\d{1,3}\d{10,14}$/.test(value);
-      }),
+
     password: yup
       .string()
       .min(8, "Password must be at least 8 characters")
@@ -91,23 +81,7 @@ export default function SignUp() {
 
       // Remove confirmPassword from the data before sending to API
       const { confirmPassword, ...signupData } = data;
-
-      // TODO: Replace with your actual API endpoint
-      const response = await fetch("/api/auth/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(signupData),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Signup failed");
-      }
-
-      toast.success("Account created successfully!");
-      router.push("/login");
+      console.log(signupData);
     } catch (error) {
       console.error("Signup error:", error);
       toast.error(
@@ -118,12 +92,6 @@ export default function SignUp() {
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  const handlePhoneChange = (value: string | undefined) => {
-    setValue("phoneNumber", value || "");
-    // Trigger validation for phoneNumber field
-    trigger("phoneNumber");
   };
 
   const handleTermsChange = (checked: boolean) => {
@@ -195,32 +163,6 @@ export default function SignUp() {
                   {errors.email && (
                     <span className="text-[#e62e2e] text-sm">
                       {errors.email.message}
-                    </span>
-                  )}
-                </div>
-
-                {/* Phone Number Field */}
-                <div className="flex flex-col items-start gap-1.5 w-full">
-                  <div className="inline-flex items-start gap-0.5">
-                    <label className="relative w-fit mt-[-1.00px] font-text-2-medium text-[#333333] text-[length:var(--text-2-medium-font-size)] tracking-[var(--text-2-medium-letter-spacing)] leading-[var(--text-2-medium-line-height)] whitespace-nowrap">
-                      Phone number
-                    </label>
-                    <span className="relative w-fit mt-[-1.00px] font-text-sm-medium text-[#e62e2e] text-[length:var(--text-sm-medium-font-size)] tracking-[var(--text-sm-medium-letter-spacing)] leading-[var(--text-sm-medium-line-height)] whitespace-nowrap">
-                      *
-                    </span>
-                  </div>
-                  <div className="w-full">
-                    <PhoneInput
-                      defaultCountry="PK"
-                      value={watch("phoneNumber")}
-                      onChange={handlePhoneChange}
-                      className="custom-phone-input"
-                      disabled={isSubmitting}
-                    />
-                  </div>
-                  {errors.phoneNumber && (
-                    <span className="text-[#e62e2e] text-sm">
-                      {errors.phoneNumber.message}
                     </span>
                   )}
                 </div>
