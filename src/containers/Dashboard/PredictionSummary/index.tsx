@@ -27,11 +27,11 @@ export default function PredictionSummaryPage() {
         <MetricCard title="High Risk Compounds" value="100%" change={25} />
       </div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        <div className="col-span-2">
+        <div className="md:col-span-2">
           {/* <BarChart /> */}
           <ConfidenceScoreBarChart />
         </div>
-        <div className="col-span-1">
+        <div className="md:col-span-1">
           {/* <PieChart /> */}
           <RiskLevelDonutChart data={donutData} />
         </div>
