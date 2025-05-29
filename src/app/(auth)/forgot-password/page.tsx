@@ -9,10 +9,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
-
+import { toast } from "@/components/toast";
+import { handleForgotPassword } from "@/lib/cognito-actions";
 interface ForgotPasswordFormData {
   email: string;
 }
@@ -46,9 +46,11 @@ export default function ForgotPassword() {
     try {
       setIsSubmitting(true);
 
-      // Remove confirmPassword from the data before sending to API
-      const { ...forgotPasswordData } = data;
-      console.log(forgotPasswordData);
+      // Convert data to FormData
+      const formData = new FormData();
+      formData.append("email", data.email);
+      const response = await handleForgotPassword(undefined, formData);
+      console.log(response);
     } catch (error) {
       console.error("Forgot password error:", error);
       toast.error(

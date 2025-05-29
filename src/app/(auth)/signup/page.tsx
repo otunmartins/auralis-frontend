@@ -10,7 +10,11 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
+import { signUp } from "aws-amplify/auth";
+import { handleSignUp } from "@/lib/cognito-actions";
+import { AllRoutesEnum } from "@/lib/enums";
 interface SignUpFormData {
   fullName: string;
   email: string;
@@ -77,18 +81,25 @@ export default function SignUp() {
 
   const onSubmit: SubmitHandler<SignUpFormData> = async (data) => {
     try {
+      const { CONFIRM_SIGNUP } = AllRoutesEnum;
       setIsSubmitting(true);
-
-      // Remove confirmPassword from the data before sending to API
-      const { confirmPassword, ...signupData } = data;
-      console.log(signupData);
+      const formData = new FormData();
+      formData.append("email", data.email);
+      formData.append("password", data.password);
+      formData.append("name", data.fullName);
+      const response = await handleSignUp(undefined, formData);
+      if (response?.userId) {
+        const redirectUrl = `${CONFIRM_SIGNUP}?email=${String(
+          formData.get("email")
+        )}`;
+        router.replace(redirectUrl);
+      }
     } catch (error) {
+      setIsSubmitting(false);
+      const errorMessage =
+        error instanceof Error ? error.message : "An unknown error occurred";
+      toast.error(errorMessage);
       console.error("Signup error:", error);
-      toast.error(
-        error instanceof Error
-          ? error.message
-          : "An error occurred during signup"
-      );
     } finally {
       setIsSubmitting(false);
     }
@@ -274,8 +285,9 @@ export default function SignUp() {
             className="w-full"
             size="lg"
             disabled={isSubmitting}
+            isLoading={isSubmitting}
           >
-            {isSubmitting ? "Creating account..." : "Sign up"}
+            Sign up
           </Button>
         </div>
 
