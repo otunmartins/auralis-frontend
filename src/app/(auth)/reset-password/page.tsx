@@ -8,11 +8,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+import { useRouter, useSearchParams } from "next/navigation";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
-
+import { toast } from "sonner";
+import { handleResetPasswordConfirmation } from "@/lib/cognito-actions";
 interface ResetPasswordFormData {
   password: string;
   confirmPassword: string;
@@ -41,9 +41,12 @@ const passwordRequirements = [
   "At least one digit",
   "At least one special character",
 ];
-export default function SignUp() {
+export default function ResetPassword() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const email = searchParams.get("email");
+  const code = searchParams.get("code");
 
   const {
     register,
@@ -64,10 +67,24 @@ export default function SignUp() {
     try {
       setIsSubmitting(true);
 
-      // Remove confirmPassword from the data before sending to API
-      const { confirmPassword, ...resetPasswordData } = data;
+      if (!email || !code) {
+        toast.error("Missing required parameters");
+        return;
+      }
 
-      console.log(resetPasswordData);
+      const formData = new FormData();
+      formData.append("email", email);
+      formData.append("code", code);
+      formData.append("password", data.password);
+
+      const response = await handleResetPasswordConfirmation(
+        undefined,
+        formData
+      );
+
+      if (response?.redirectLink) {
+        router.push(response.redirectLink);
+      }
     } catch (error) {
       console.error("Reset password error:", error);
       toast.error(
