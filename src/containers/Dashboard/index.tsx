@@ -54,13 +54,13 @@ export default function DashboardPage() {
             <TabsList className="bg-white border border-[#E3E3E3] rounded-lg !p-2">
               <TabsTrigger
                 value="prediction-summary"
-                className="font-medium data-[state=active]:bg-neutral-50 data-[state=active]:text-primary-950"
+                className="font-medium data-[state=active]:bg-neutral-50 data-[state=active]:text-primary-950 max-md:text-label-small max-md:px-2"
               >
                 Prediction Summary
               </TabsTrigger>
               <TabsTrigger
                 value="prediction-result"
-                className="font-medium data-[state=active]:bg-neutral-50 data-[state=active]:text-primary-950"
+                className="font-medium data-[state=active]:bg-neutral-50 data-[state=active]:text-primary-950 max-md:text-label-small max-md:px-2"
               >
                 Prediction Result
               </TabsTrigger>
